@@ -14,8 +14,18 @@ angular.
         }).
         when('/survey/:surveyId', {
           templateUrl: 'survey.html',
-          controller: 'surveyController'
         })//.
         // otherwise('/');
     }
   ]);
+  
+  
+angular.
+  module('learnG').controller('surveyController',function($scope,$routeParams,$http){
+    $scope.surveyId = $routeParams.surveyId 
+    $http.get('data/' + $routeParams.surveyId + '.json').then(function(response) {
+      console.log(response)
+          $scope.surveyData = response.data;
+          })
+
+  })
