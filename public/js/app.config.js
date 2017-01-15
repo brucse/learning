@@ -35,8 +35,9 @@ angular.
 });
 
 
-
 var survey = new Survey(game)
+//@todo temporary solution
+game.__proto__.survey = survey
 
 survey.questionarieFilledSignal.add(function(){
 

@@ -72,7 +72,7 @@ RepeatQuestionarie.prototype = Object.create(Questionarie.prototype)
 
 RepeatQuestionarie.prototype.constructor = RepeatQuestionarie
 
-RepeatQuestionarie.prototype.addNextChar = function(char){
+RepeatQuestionarie.prototype.addNextChar = function(char,game){
 	this.questionSettings.fill = 'green'
 //	@todo ???
 	if(this.answerTextObject == null){
@@ -130,7 +130,7 @@ EngraveQuestionarie.prototype.displayQuestion = function(game,x,y){
 //	if(i == 0) repeatText.startBlinking();
 }
 
-EngraveQuestionarie.prototype.addNextChar = function(char){
+EngraveQuestionarie.prototype.addNextChar = function(char,game){
 
 	this.questionMarkTextObject.destroy()
 	
@@ -179,7 +179,7 @@ CheckQuestionarie.prototype = Object.create(Questionarie.prototype)
 
 CheckQuestionarie.prototype.constructor = CheckQuestionarie
 
-CheckQuestionarie.prototype.addNextChar = function(char){
+CheckQuestionarie.prototype.addNextChar = function(char,game){
 
 //	this.questionMarkTextObject.destroy()
 
@@ -304,7 +304,7 @@ var Survey = function (game){
 	}
 
 
-	this.handleUserInput = function(inputChar,mode){
+	this.handleUserInput = function(inputChar,mode,game){
 		var actualQuestion	
 		var actualQuestionsArray
 
@@ -335,7 +335,7 @@ var Survey = function (game){
 
 
 
-		actualQuestion.addNextChar(inputChar);
+		actualQuestion.addNextChar(inputChar,game);
 		if(actualQuestion.isAnswerComplete()){
 			if(actualQuestion.isAnswered){
 				//check is everything is complete

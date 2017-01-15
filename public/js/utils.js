@@ -22,7 +22,7 @@ function policemanAndHorizontal(policeman, horizontal) {
 		cage.body.velocity.y = 400;
 		policeman.body.velocity.y = 0;
 		statusObject.stopPoliceman = true;
-		createQuestion();
+		createQuestion(this);
 		statusObject.robberInCageAndRighWall = true;
 		statusObject.gameState = GAME_STATES.CAGE_CLOSED_FOR_POLICEMAN
 		
@@ -53,14 +53,14 @@ function moveCageUp() {
 
 
 
-function createQuestion() {
+function createQuestion(context) {
 
 	console.log('mode: ' +statusObject.actualMode)
 	var textY = 1;
-	survey.displaySurvey(statusObject.actualMode)
+	context.game.__proto__.survey.displaySurvey(statusObject.actualMode)
 
 
-	game.input.keyboard.addCallbacks(this, null, null, keyPress);
+	context.game.input.keyboard.addCallbacks(context, null, null, keyPress);
 	//             keyPressBuffer = [];
 }
 
@@ -86,7 +86,7 @@ function keyPress(char) {
 
 	}
 
-	survey.handleUserInput(char,statusObject.actualMode)
+	this.game.__proto__.survey.handleUserInput(char,statusObject.actualMode,this.game)
 }
 
 /*function resetResultInText() {
@@ -126,6 +126,7 @@ function isGrandFinale(x, y) {
 }
 
 function grandFinale() {
+	var game = 	this.game
 	//         	alert('finale');
 	console.log('finale');
 	// 			robber.alpha = 0;
@@ -164,6 +165,7 @@ function grandFinale() {
 }
 
 function robberInTheCage(){
+	var game = this.game
 	cop_car.alpha= 0;
 	prisonCell = game.add.sprite(CAGE_X-75,CAGE_Y, 'prison_cell');
 	 game.physics.arcade.enable(prisonCell);

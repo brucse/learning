@@ -5,18 +5,18 @@ function update() {
 		robber.visible = true
 	}
 
-	game.physics.arcade.collide(policeman, platforms); 
-	game.physics.arcade.collide(robber, platforms);
-	game.physics.arcade.collide(cage, platforms, cageAndPlatforms);
-	game.physics.arcade.collide(robber,cage,robberAndCage);
-	game.physics.arcade.collide(policeman,cage);
-	game.physics.arcade.collide(cage,uplimit,cageAndUplimit,null,this);
-	game.physics.arcade.collide(policeman,horizontal,policemanAndHorizontal, policemanAndHorizontalFirst);
-	game.physics.arcade.overlap(cage,uplimit,grandFinale,isGrandFinale); 
-	game.physics.arcade.overlap(robber, cop_car, function(){
+	this.physics.arcade.collide(policeman, platforms); 
+	this.physics.arcade.collide(robber, platforms);
+	this.physics.arcade.collide(cage, platforms, cageAndPlatforms);
+	this.physics.arcade.collide(robber,cage,robberAndCage);
+	this.physics.arcade.collide(policeman,cage);
+	this.physics.arcade.collide(cage,uplimit,cageAndUplimit,null,this);
+	this.physics.arcade.collide(policeman,horizontal,policemanAndHorizontal, policemanAndHorizontalFirst,this);
+	this.physics.arcade.overlap(cage,uplimit,grandFinale,isGrandFinale,this); 
+	this.physics.arcade.overlap(robber, cop_car, function(){
 		robber.alpha = 0;
 	});
-	game.physics.arcade.overlap(policeman, cop_car, function(){
+	this.physics.arcade.overlap(policeman, cop_car, function(){
 		policeman.alpha = 0;
 	});
 
@@ -92,14 +92,14 @@ function update() {
 
 
 function render(){
-//	game.debug.inputInfo(32,32)
-//	 game.debug.pointer( game.input.activePointer );
+//	this.debug.inputInfo(32,32)
+//	 this.debug.pointer( this.input.activePointer );
 //	robber.visible = true
-//	game.debug.spriteInfo(robber,400,30,'yellow')
-//	game.debug.key(cursors.left,400,130)
-//	game.debug.spriteInfo(robber,400,30)
+//	this.debug.spriteInfo(robber,400,30,'yellow')
+//	this.debug.key(cursors.left,400,130)
+//	this.debug.spriteInfo(robber,400,30)
 	/*	if(prisonCell != null){
-		game.debug.spriteInfo(prisonCell,400,200)
+		this.debug.spriteInfo(prisonCell,400,200)
 	}
 	 */}
 
