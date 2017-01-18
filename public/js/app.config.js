@@ -75,7 +75,7 @@ survey.questionarieFilledSignal.add(function(){
 /*game.load.json('survey_data', 'data/survey_data.js');
 var surveyData = game.cache.getJSON('survey_data');
 */survey.loadJSONData(surveyData)
-statusObject.actualMode = survey.getAvaiableStatuses()[0]
+PracticeGame.variables.statusObject.actualMode = survey.getAvaiableStatuses()[0]
 
           })
 

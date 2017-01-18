@@ -254,7 +254,7 @@ var Survey = function (game){
 	this.getAvaiableStatuses =  function(){
 		var ret = []
 		if(_.size(this.questionsInINTRODUCTION_MODE) > 0){
-			ret.push( ACTUAL_MODES.INTRODUCTION_MODE)
+			ret.push( PracticeGame.variables.ACTUAL_MODES.INTRODUCTION_MODE)
 		}
 
 		if(_.size(this.questionsInENGRAVE_MODE) > 0){
