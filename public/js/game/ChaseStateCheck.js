@@ -1,10 +1,10 @@
-PracticeGame.ChaseState = function(game) {
+PracticeGame.ChaseStateEngrave = function(game) {
 
 };
 
-PracticeGame.ChaseState.prototype = Object.create(PracticeGameBaseState.prototype)
+PracticeGame.ChaseStateEngrave.prototype = Object.create(PracticeGameBaseState.prototype)
 
-PracticeGame.ChaseState.prototype.preload = function() {
+PracticeGame.ChaseStateEngrave.prototype.preload = function() {
     //	this.load.image('wall', 'assets/wall.jpg');
     this.load.image('wall', 'assets/sky1.png');
     this.load.image('ground', 'assets/platform.png');
@@ -19,7 +19,7 @@ PracticeGame.ChaseState.prototype.preload = function() {
 }
 
 
-PracticeGame.ChaseState.prototype.create = function() {
+PracticeGame.ChaseStateEngrave.prototype.create = function() {
     this.CAGE_Y = (this.world.height - (150 + 63));
     //  We're going to be using physics, so enable the Arcade Physics system
     this.physics.startSystem(Phaser.Physics.ARCADE);
@@ -124,7 +124,7 @@ PracticeGame.ChaseState.prototype.create = function() {
 
 }
 
-PracticeGame.ChaseState.prototype.update = function() {
+PracticeGame.ChaseStateEngrave.prototype.update = function() {
 
     //visible error hack, do not set robber visible in resetWorld
     if ((this.gameState == PracticeGameConstants.GAME_STATES.START || this.gameState == PracticeGameConstants.GAME_STATES.ROBBER_IN_PRISON) && robber.visible == false) {
@@ -221,7 +221,8 @@ PracticeGame.ChaseState.prototype.update = function() {
     }
 }
 
-PracticeGame.ChaseState.render = function() {
+PracticeGame.ChaseStateEngrave.render = function() {
+    
     function render() {
         //	this.debug.inputInfo(32,32)
         //	 this.debug.pointer( this.input.activePointer );
