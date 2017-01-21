@@ -1,5 +1,3 @@
-var PracticeGame = {}
-
 PracticeGame.variables = function (){
  this.stop = false
  this.blocked = true
