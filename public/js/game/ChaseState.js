@@ -121,6 +121,7 @@ PracticeGame.ChaseState.prototype.create = function() {
     //    policeman.animations.add('left', [0, 1, 2, 3], 10, true);
     //    policeman.animations.add('right', [5, 6, 7, 8], 10, true);
     cursors = this.input.keyboard.createCursorKeys();
+    this.gameState = PracticeGameConstants.GAME_STATES.START
 
 }
 
@@ -134,7 +135,7 @@ PracticeGame.ChaseState.prototype.update = function() {
     this.physics.arcade.collide(policeman, platforms);
     this.physics.arcade.collide(robber, platforms);
     this.physics.arcade.collide(cage, platforms, PracticeUtils.cageAndPlatforms);
-    this.physics.arcade.collide(robber, cage, PracticeUtils.robberAndCage);
+    this.physics.arcade.collide(robber, cage, PracticeUtils.robberAndCage,null,this);
     this.physics.arcade.collide(policeman, cage);
     this.physics.arcade.collide(cage, uplimit, PracticeUtils.cageAndUplimit, null, this);
     this.physics.arcade.collide(policeman, horizontal, PracticeUtils.policemanAndHorizontal, PracticeUtils.policemanAndHorizontalFirst, this);

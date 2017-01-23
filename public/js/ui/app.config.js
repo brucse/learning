@@ -81,7 +81,7 @@ module('learnG').controller('surveyController', function($scope, $routeParams, $
 		var surveyData = game.cache.getJSON('survey_data');
 		*/
 		survey.loadJSONData($scope.surveyData)
-		PracticeGame.statusObject.actualMode = survey.getAvaiableStatuses()[0]
+		// PracticeGame.statusObject.actualMode = survey.getAvaiableStatuses()[0]
 		
 		
 		game.state.start('InitState');

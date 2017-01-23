@@ -1,3 +1,6 @@
+/*var PracticeGame = function(){
+	
+}*/
 PracticeGame.InitState = function(){
     
 }

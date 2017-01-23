@@ -7,7 +7,7 @@ PracticeUtils.cageAndPlatforms =  function cageAndPlatforms(cage,platforms){
 PracticeUtils.robberAndCage =   function robberAndCage(robber, cage) {
 	if(this.gameState == PracticeGameConstants.GAME_STATES.START){
 		cage.body.velocity.y = -400;
-		statusObject.gameState = PracticeGameConstants.GAME_STATES.CAGE_OPEN_FOR_ROBBER
+		this.gameState = PracticeGameConstants.GAME_STATES.CAGE_OPEN_FOR_ROBBER
 	}else if (this.gameState == PracticeGameConstants.GAME_STATES.CAGE_CLOSED_FOR_POLICEMAN){
 		robber.body.velocity.x = 150
 	}
@@ -20,10 +20,12 @@ PracticeUtils.cageAndUplimit =  function cageAndUplimit(cage, uplimit) {
 
 PracticeUtils.policemanAndHorizontal = function policemanAndHorizontal(policeman, horizontal) {
 	
-	if(statusObject.gameState == GAME_STATES.CAGE_OPEN_FOR_ROBBER){
+	if(this.__proto__.gameState == PracticeGameConstants.GAME_STATES.CAGE_OPEN_FOR_ROBBER){
 		cage.body.velocity.y = 400;
 		policeman.body.velocity.y = 0;
 		statusObject.stopPoliceman = true;
+		console.log('call SurveyState')
+		this.state.start('SurveyState');
 		createQuestion(this);
 		statusObject.robberInCageAndRighWall = true;
 		statusObject.gameState = GAME_STATES.CAGE_CLOSED_FOR_POLICEMAN
@@ -149,18 +151,18 @@ PracticeUtils.grandFinale = function grandFinale() {
 	}, this); 
 
 	noUpdate = true;
-	statusObject.stopPoliceman = true;
+	this.stopPoliceman = true;
 
-	if(cop_car == null){
+	if(this.cop_car == null){
 
-		cop_car = game.add.sprite(game.world.width- 150, game.world.height - 120, 'cop_car');
-		game.physics.arcade.enable(cop_car);
-		cop_car.enableBody = true;
-		cop_car.body.velocity.x = -100;
+		this.cop_car = game.add.sprite(game.world.width- 150, game.world.height - 120, 'cop_car');
+		game.physics.arcade.enable(this.cop_car);
+		this.cop_car.enableBody = true;
+		this.cop_car.body.velocity.x = -100;
 
-		cop_car.body.collideWorldBounds = true;
-		cop_car.body.onWorldBounds = new Phaser.Signal();
-		cop_car.body.onWorldBounds.add(robberInTheCage , this);
+		this.cop_car.body.collideWorldBounds = true;
+		this.cop_car.body.onWorldBounds = new Phaser.Signal();
+		this.cop_car.body.onWorldBounds.add(this.robberInTheCage , this);
 	}
 
 

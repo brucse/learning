@@ -6,7 +6,7 @@ PracticeGameBaseState.prototype = Object.create(Phaser.State.prototype);
 // PracticeGameBaseState.prototype.constructor = PracticeGameBaseState
 
 
-PracticeGameBaseState.prototype.gameState = null
+PracticeGameBaseState.prototype.gameState
 
 
 PracticeGameBaseState.prototype.platforms

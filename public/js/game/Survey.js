@@ -31,18 +31,18 @@ var Survey = function (game){
 	this.getAvaiableStatuses =  function(){
 		var ret = []
 		if(_.size(this.questionsInINTRODUCTION_MODE) > 0){
-			ret.push( PracticeGame.ACTUAL_MODES.INTRODUCTION_MODE)
+			ret.push( PracticeGameConstants.ACTUAL_MODES.INTRODUCTION_MODE)
 		}
 
 		if(_.size(this.questionsInENGRAVE_MODE) > 0){
-			ret.push(PracticeGame.ACTUAL_MODES.ENGRAVE_MODE)
+			ret.push(PracticeGameConstants.ACTUAL_MODES.ENGRAVE_MODE)
 		}
 
 		if(_.size(this.questionsInCHECK_MODE) > 0){
-			ret.push(PracticeGame.ACTUAL_MODES.CHECK_MODE)
+			ret.push(PracticeGameConstants.ACTUAL_MODES.CHECK_MODE)
 		}
 		
-		ret.push(PracticeGame.ACTUAL_MODES.SCORE_MODE)
+		ret.push(PracticeGameConstants.ACTUAL_MODES.SCORE_MODE)
 		
 		return ret
 	}
