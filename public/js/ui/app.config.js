@@ -37,7 +37,8 @@ module('learnG').controller('surveyController', function($scope, $routeParams, $
 		var game = new Phaser.Game(800, 600);
 
 		game.state.add('InitState', PracticeGame.InitState);
-		game.state.add('ChaseStateIntroduction', PracticeGame.ChaseStateIntroduction);
+		game.state.add('ChaseState', PracticeGame.ChaseState);
+		game.state.add('SurveyState', PracticeGame.SurveyState);
 
 
 		var survey = new Survey(game)
