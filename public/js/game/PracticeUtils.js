@@ -20,15 +20,15 @@ PracticeUtils.cageAndUplimit =  function cageAndUplimit(cage, uplimit) {
 
 PracticeUtils.policemanAndHorizontal = function policemanAndHorizontal(policeman, horizontal) {
 	
-	if(this.__proto__.gameState == PracticeGameConstants.GAME_STATES.CAGE_OPEN_FOR_ROBBER){
+	if(this.gameState == PracticeGameConstants.GAME_STATES.CAGE_OPEN_FOR_ROBBER){
 		cage.body.velocity.y = 400;
 		policeman.body.velocity.y = 0;
-		statusObject.stopPoliceman = true;
+		this.stopPoliceman = true;
 		console.log('call SurveyState')
 		this.state.start('SurveyState');
-		createQuestion(this);
-		statusObject.robberInCageAndRighWall = true;
-		statusObject.gameState = GAME_STATES.CAGE_CLOSED_FOR_POLICEMAN
+		// PracticeUtils.createQuestion(this);
+		this.robberInCageAndRighWall = true;
+		this.gameState = PracticeGameConstants.GAME_STATES.CAGE_CLOSED_FOR_POLICEMAN
 		
 	}
 
@@ -147,7 +147,7 @@ PracticeUtils.grandFinale = function grandFinale() {
 		cursors.right.isDown = false;
 		// 			stopPoliceman = true;
 		// 			cursors.enabled = false;
-		statusObject.gameState = GAME_STATES.ROBBER_IN_PRISON
+		this.gameState = PracticeGameConstants.GAME_STATES.ROBBER_IN_PRISON
 	}, this); 
 
 	noUpdate = true;
@@ -162,7 +162,7 @@ PracticeUtils.grandFinale = function grandFinale() {
 
 		this.cop_car.body.collideWorldBounds = true;
 		this.cop_car.body.onWorldBounds = new Phaser.Signal();
-		this.cop_car.body.onWorldBounds.add(this.robberInTheCage , this);
+		this.cop_car.body.onWorldBounds.add(PracticeUtils.robberInTheCage , this);
 	}
 
 

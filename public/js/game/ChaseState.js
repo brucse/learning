@@ -136,10 +136,10 @@ PracticeGame.ChaseState.prototype.update = function() {
     this.physics.arcade.collide(robber, platforms);
     this.physics.arcade.collide(cage, platforms, PracticeUtils.cageAndPlatforms);
     this.physics.arcade.collide(robber, cage, PracticeUtils.robberAndCage,null,this);
-    this.physics.arcade.collide(policeman, cage);
     this.physics.arcade.collide(cage, uplimit, PracticeUtils.cageAndUplimit, null, this);
     this.physics.arcade.collide(policeman, horizontal, PracticeUtils.policemanAndHorizontal, PracticeUtils.policemanAndHorizontalFirst, this);
-    this.physics.arcade.overlap(cage, uplimit, PracticeUtils.grandFinale, PracticeUtils.isGrandFinale, this);
+    // this.physics.arcade.collide(policeman, cage);
+    // this.physics.arcade.overlap(cage, uplimit, PracticeUtils.grandFinale, PracticeUtils.isGrandFinale, this);
     this.physics.arcade.overlap(robber, PracticeUtils.cop_car, function() {
         robber.alpha = 0;
     });

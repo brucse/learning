@@ -1,9 +1,9 @@
-PracticeGame.ChaseState = function(game) {
+PracticeGame.SurveyState= function(game) {
 
 };
 
-PracticeGame.ChaseState.prototype = Object.create(PracticeGameBaseState.prototype)
+PracticeGame.SurveyState.prototype = Object.create(PracticeGameBaseState.prototype)
 
-PracticeGame.ChaseState.prototype.preload = function() {
+PracticeGame.SurveyState.prototype.preload = function() {
     console.log('survey state start')
 }
