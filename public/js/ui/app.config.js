@@ -84,7 +84,8 @@ module('learnG').controller('surveyController', function($scope, $routeParams, $
 		// PracticeGame.statusObject.actualMode = survey.getAvaiableStatuses()[0]
 		
 		
-		game.state.start('InitState');
+		// game.state.start('InitState');
+		game.state.start('SurveyState');
 
 	})
 
