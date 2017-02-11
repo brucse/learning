@@ -1,0 +1,98 @@
+PracticeGame.ShootingState= function(game) {
+    this.bullet = null
+    this.gun = null
+    this.policeman = null
+    this.robber = null
+    //this.game = game
+
+};
+
+PracticeGame.ShootingState.prototype = Object.create(PracticeGameBaseState.prototype)
+
+
+
+PracticeGame.ShootingState.prototype.preload = function() {
+    //	this.load.image('wall', 'assets/wall.jpg');
+    this.load.image('wall', 'assets/sky1.png');
+    this.load.image('ground', 'assets/platform.png');
+    this.load.spritesheet('robber', 'assets/robber_animation4.png', 34, 48);
+    this.load.spritesheet('policeman', 'assets/policeman_animation.png', 34, 48);
+    this.load.spritesheet('gun', 'assets/gun.png', 24, 45);
+    this.load.spritesheet('bullet', 'assets/bullet.png', 12, 16);
+}
+
+
+PracticeGame.ShootingState.prototype.create = function() {
+    
+    this.wall = this.add.sprite(0, 0, 'wall');
+    
+    //  Creates 30 bullets, using the 'bullet' graphic
+    this.bullet = this.game.add.weapon(30, 'bullet');
+
+    //  The bullet will be automatically killed when it leaves the world bounds
+    this.bullet.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
+
+    //  The speed at which the bullet is fired
+    this.bullet.bulletSpeed = 600;
+
+    //  Speed-up the rate of fire, allowing them to shoot 1 bullet every 60ms
+    this.bullet.fireRate = 100;
+    
+    this.bullet.angle = 90
+    
+    this.gun = this.add.sprite(this.world.height- 50,this.world.width/2,'gun')
+    
+     this.game.physics.arcade.enable(this.gun);
+
+    this.gun.body.drag.set(70);
+    this.gun.body.maxVelocity.set(200);
+     this.gun.anchor.setTo(0, 0);
+     this.gun.angle = -90
+
+     
+
+    //  Tell the Weapon to track the 'player' Sprite
+    //  With no offsets from the position
+    //  But the 'true' argument tells the weapon to track sprite rotation
+    this.bullet.trackSprite(this.gun, 50, 3, true);
+
+    this.cursors = this.input.keyboard.createCursorKeys();
+
+    this.fireButton = this.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
+
+ 
+    
+}
+
+PracticeGame.ShootingState.prototype.update = function(){
+
+  if (this.cursors.up.isDown)
+    {
+        this.game.physics.arcade.accelerationFromRotation(this.gun.rotation,0, this.gun.body.acceleration);
+    }
+    else
+    {
+        this.gun.body.acceleration.set(0);
+    }
+
+    if (this.cursors.left.isDown)
+    {
+        this.gun.body.angularVelocity = -300;
+    }
+    else if (this.cursors.right.isDown)
+    {
+        this.gun.body.angularVelocity = 300;
+    }
+    else
+    {
+        this.gun.body.angularVelocity = 0;
+    }
+
+    if (this.fireButton.isDown)
+    {
+        this.bullet.fire();
+    }
+
+    this.game.world.wrap(this.gun, 16);    
+    
+}

@@ -23,11 +23,13 @@
     "npm": ">= 1.0.0"
   },
   "dependencies": {
-    "express": "^4.14.0"
+    "express": "^4.14.1"
   },
   "devDependencies": {},
   "bundleDependencies": [],
   "private": true,
   "main": "app.js",
-  "scripts" :{"start":"node app.js"}
+  "scripts": {
+    "start": "node app.js"
+  }
 }
