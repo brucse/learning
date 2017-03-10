@@ -15,7 +15,8 @@ PracticeGame.ShootingState.prototype.preload = function() {
     //	this.load.image('wall', 'assets/wall.jpg');
     this.load.image('wall', 'assets/sky1.png');
     this.load.image('ground', 'assets/platform.png');
-    this.load.spritesheet('robber', 'assets/robber_animation4.png', 34, 48);
+    this.load.spritesheet('robber', 'assets/robber_animation5.png', 35.5, 48);
+    // this.load.spritesheet('robber_laying', 'assets/robber_laying.png', 48, 48);
     this.load.spritesheet('policeman', 'assets/policeman_animation_shooting.png', 34, 68);
     // this.load.spritesheet('gun', 'assets/gun.png', 24, 45);
     this.load.spritesheet('bullet', 'assets/bullet.png', 12, 16);
@@ -76,6 +77,13 @@ PracticeGame.ShootingState.prototype.create = function() {
     this.robber.body.bounce.x = 1
     this.robber.body.velocity.x = 150
     
+    
+    this.robber.animations.add('right', [0, 1, 2], 15, true);
+    this.robber.animations.add('left', [4, 5, 6], 15, true);
+    this.robber.animations.add('stop', [3], 15, false);
+    this.robber.animations.add('dead', [7], 15, false);
+
+    
     this.cursors = this.input.keyboard.createCursorKeys();
 
     this.fireButton = this.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
@@ -120,6 +128,13 @@ PracticeGame.ShootingState.prototype.update = function() {
     // this.game.world.wrap(this.policeman, 16);    
     //bullet detection
     
+    if( this.robber.body.velocity.x > 0){
+        this.robber.animations.play('right')
+    }else if(this.robber.body.velocity.x < 0){
+        this.robber.animations.play('left')
+    }else if(this.robber.body.velocity.x = 0){
+        this.robber.animations.play('stop')
+    }
     this.game.physics.arcade.overlap(this.weapon.bullets, this.robber, this.detectBullet, null, this);
 }
 
@@ -132,5 +147,13 @@ PracticeGame.ShootingState.prototype.render = function(){
 PracticeGame.ShootingState.prototype.detectBullet = function(bullets,robber){
     console.log('bullet shot')
     this.robber.body.velocity.x = 0
+    this.robber.animations.play('dead');
+    var timer = this.game.time.create()
+    timer.add(Phaser.Timer.SECOND * 3, function(){
+    this.robber.body.velocity.x = 150
+    console.log('ressurrection')
+    this.robber.animations.play('stop');
+    }, this);
+    timer.start()
     this.weapon.killAll()
 }
