@@ -4,6 +4,7 @@ PracticeGame.ShootingState = function(game) {
     this.policeman = null
     this.robber = null
         //this.game = game
+    this.shotCounter = 0
 
 };
 
@@ -143,6 +144,7 @@ PracticeGame.ShootingState.prototype.render = function(){
     //   this.game.debug.body(this.weapon.bullets);
     //   this.game.debug.bodyInfo(this.weapon.bullets, 32, 32);
     //   this.game.debug.bodyInfo(this.robber, 132, 132);
+    this.game.debug.text(this.shotCounter + ' talalat ' , 2,14,'#ff0')
 }
 PracticeGame.ShootingState.prototype.detectBullet = function(bullets,robber){
     console.log('bullet shot')
@@ -156,4 +158,5 @@ PracticeGame.ShootingState.prototype.detectBullet = function(bullets,robber){
     }, this);
     timer.start()
     this.weapon.killAll()
+    this.shotCounter++
 }
