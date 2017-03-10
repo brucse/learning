@@ -39,7 +39,7 @@ module('learnG').controller('surveyController', function($scope, $routeParams, $
 		// game.state.add('InitState', PracticeGame.InitState);
 		game.state.add('ShootingState', PracticeGame.ShootingState);
 		// game.state.add('ChaseState', PracticeGame.ChaseState);
-		// game.state.add('SurveyState', PracticeGame.SurveyState);
+		game.state.add('SurveyState', PracticeGame.SurveyState);
 
 
 		var survey = new Survey(game)
