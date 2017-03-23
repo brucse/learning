@@ -39,7 +39,7 @@ module('learnG').controller('surveyController', function($scope, $routeParams, $
 		// game.state.add('InitState', PracticeGame.InitState);
 		game.state.add('ShootingState', PracticeGame.ShootingState);
 		// game.state.add('ChaseState', PracticeGame.ChaseState);
-		game.state.add('SurveyState', PracticeGame.SurveyState);
+		game.state.add('SurveyStateLearn2X', PracticeGame.SurveyStateLearn2X);
 
 
 		var survey = new Survey(game)
@@ -87,7 +87,8 @@ module('learnG').controller('surveyController', function($scope, $routeParams, $
 		
 		// game.state.start('InitState');
 		// game.state.start('SurveyState');
-		game.state.start('ShootingState');
+		// game.state.start('ShootingState');
+		game.state.start('SurveyStateLearn2X');
 
 	})
 

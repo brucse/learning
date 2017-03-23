@@ -160,6 +160,6 @@ PracticeGame.ShootingState.prototype.detectBullet = function(bullets,robber){
     this.weapon.killAll()
     this.shotCounter++
     if(this.shotCounter == 2)  {
-		this.game.state.start('SurveyState');
+		this.game.state.start('SurveyState2X');
     }
 }
