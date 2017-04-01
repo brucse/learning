@@ -16,7 +16,7 @@ PracticeGame.SurveyStateLearn2X = function(game) {
     this.helpCountingTextGroup
     this.helpCountingTextGroupSetting
     this.answer = ""
-    this.multiplier = 4
+    this.multiplier = 0 
     this.multiplicand = 2
     this.countedClick = 0
     this.clearButton
@@ -31,6 +31,12 @@ PracticeGame.SurveyStateLearn2X = function(game) {
 
 PracticeGame.SurveyStateLearn2X.prototype = Object.create(PracticeGameBaseState.prototype)
 
+
+PracticeGame.SurveyStateLearn2X.prototype.init = function(surveyCount) {
+   this.multiplier = surveyCount 
+   this.answer = ""
+}
+
 PracticeGame.SurveyStateLearn2X.prototype.preload = function() {
 
     // this.load.spritesheet('bicycle', 'assets/bicycle.png', 120, 76);
@@ -44,6 +50,7 @@ PracticeGame.SurveyStateLearn2X.prototype.preload = function() {
     this.load.spritesheet('compute_button', 'assets/compute_button_sheet.png', 72, 23);
     this.load.spritesheet('help_button', 'assets/help_button_sheet.png', 72, 23);
     this.load.spritesheet('clear_button', 'assets/clear_button_sheet.png', 72, 23);
+    this.load.spritesheet('backtogame_button', 'assets/backtogame_button_sheet.png', 72, 23);
     this.load.image('wall', 'assets/sky1.png');
 }
 
@@ -380,7 +387,15 @@ PracticeGame.SurveyStateLearn2X.prototype.utils = {
 
     readyButtonClick: function() {
         if (this.answer == (this.multiplier * this.multiplicand).toString()) {
-            this.instructionText.setText("Ügyes vagy, ez a helyes válasz!")
+            this.instructionText.setText("Ügyes vagy, ez a helyes válasz!\n Kattints a \"JÁTÉK\" gombra")
+            this.helpButton.destroy()
+            this.clearButton.destroy()
+            this.readyButton.destroy()
+            
+      this.add.button(700, 10, 'backtogame_button', function(){
+         //@todo this.multiplier separate to round counting 
+		this.game.state.start('ShootingState',true,false,1,true);
+      }, this, 0, 0, 0, 1);
         }
     },
     
@@ -388,6 +403,8 @@ PracticeGame.SurveyStateLearn2X.prototype.utils = {
        this.answer = "" 
         this.questionText.setText(this.multiplier.toString() + " * " + this.multiplicand.toString() +  " = " + this.answer)
     }
+    
+    
 
 
 }

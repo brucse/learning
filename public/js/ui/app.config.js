@@ -87,8 +87,8 @@ module('learnG').controller('surveyController', function($scope, $routeParams, $
 		
 		// game.state.start('InitState');
 		// game.state.start('SurveyState');
-		// game.state.start('ShootingState');
-		game.state.start('SurveyStateLearn2X');
+		game.state.start('ShootingState',true,false,1);
+		// game.state.start('SurveyStateLearn2X');
 
 	})
 

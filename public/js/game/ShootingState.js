@@ -5,12 +5,21 @@ PracticeGame.ShootingState = function(game) {
     this.robber = null
         //this.game = game
     this.shotCounter = 0
+    this.round
+    this.surveyCount = 1
 
 };
 
 PracticeGame.ShootingState.prototype = Object.create(PracticeGameBaseState.prototype)
 
-
+PracticeGame.ShootingState.prototype.init = function(round,newSurvey){
+    
+    this.shotCounter = 0
+    this.round = round
+    if(newSurvey){
+        this.surveyCount++
+    }
+}
 
 PracticeGame.ShootingState.prototype.preload = function() {
     //	this.load.image('wall', 'assets/wall.jpg');
@@ -21,6 +30,7 @@ PracticeGame.ShootingState.prototype.preload = function() {
     this.load.spritesheet('policeman', 'assets/policeman_animation_shooting.png', 34, 68);
     // this.load.spritesheet('gun', 'assets/gun.png', 24, 45);
     this.load.spritesheet('bullet', 'assets/bullet.png', 12, 16);
+    
 }
 
 
@@ -46,7 +56,7 @@ PracticeGame.ShootingState.prototype.create = function() {
 
     // this.bullet.angle = 90
 
-    this.policeman = this.add.sprite(this.world.width / 2, this.world.height - 68, 'policeman')
+    this.policeman = this.add.sprite(this.world.width / 2, this.world.height - 68 * this.round, 'policeman')
 
     this.game.physics.arcade.enable(this.policeman);
 
@@ -137,14 +147,19 @@ PracticeGame.ShootingState.prototype.update = function() {
         this.robber.animations.play('stop')
     }
     this.game.physics.arcade.overlap(this.weapon.bullets, this.robber, this.detectBullet, null, this);
+	this.game.physics.arcade.overlap(this.robber, this.policeman, function(){
+	   // this.surveyCount++ 
+		this.game.state.start('SurveyStateLearn2X',true,false,this.surveyCount);
+	},null,this)
 }
 
 PracticeGame.ShootingState.prototype.render = function(){
     //   this.game.debug.body(this.robber);
+      this.game.debug.spriteInfo(this.policeman,20,20);
     //   this.game.debug.body(this.weapon.bullets);
     //   this.game.debug.bodyInfo(this.weapon.bullets, 32, 32);
     //   this.game.debug.bodyInfo(this.robber, 132, 132);
-    this.game.debug.text(this.shotCounter + ' talalat ' , 2,14,'#ff0')
+    // this.game.debug.text(this.shotCounter + ' talalat ' , 2,14,'#ff0')
 }
 PracticeGame.ShootingState.prototype.detectBullet = function(bullets,robber){
     console.log('bullet shot')
@@ -159,7 +174,9 @@ PracticeGame.ShootingState.prototype.detectBullet = function(bullets,robber){
     timer.start()
     this.weapon.killAll()
     this.shotCounter++
-    if(this.shotCounter == 2)  {
-		this.game.state.start('SurveyState2X');
+    if(this.shotCounter > 0)  {
+// 		this.game.state.start('SurveyState2X');
+        this.round++
+		this.game.state.start('ShootingState',true,false,this.round,false);
     }
 }
