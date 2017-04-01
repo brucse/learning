@@ -155,7 +155,7 @@ PracticeGame.ShootingState.prototype.update = function() {
 
 PracticeGame.ShootingState.prototype.render = function(){
     //   this.game.debug.body(this.robber);
-      this.game.debug.spriteInfo(this.policeman,20,20);
+    //   this.game.debug.spriteInfo(this.policeman,20,20);
     //   this.game.debug.body(this.weapon.bullets);
     //   this.game.debug.bodyInfo(this.weapon.bullets, 32, 32);
     //   this.game.debug.bodyInfo(this.robber, 132, 132);
@@ -166,7 +166,7 @@ PracticeGame.ShootingState.prototype.detectBullet = function(bullets,robber){
     this.robber.body.velocity.x = 0
     this.robber.animations.play('dead');
     var timer = this.game.time.create()
-    timer.add(Phaser.Timer.SECOND * 3, function(){
+    timer.add(Phaser.Timer.SECOND * 1, function(){
     this.robber.body.velocity.x = 150
     console.log('ressurrection')
     this.robber.animations.play('stop');
@@ -174,7 +174,7 @@ PracticeGame.ShootingState.prototype.detectBullet = function(bullets,robber){
     timer.start()
     this.weapon.killAll()
     this.shotCounter++
-    if(this.shotCounter > 0)  {
+    if(this.shotCounter >= 5)  {
 // 		this.game.state.start('SurveyState2X');
         this.round++
 		this.game.state.start('ShootingState',true,false,this.round,false);

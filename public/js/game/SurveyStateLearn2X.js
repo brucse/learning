@@ -81,7 +81,7 @@ PracticeGame.SurveyStateLearn2X.prototype.create = function() {
 
     this.physics.startSystem(Phaser.Physics.ARCADE);
 
-    this.readyButton = this.add.button(700, 10, 'ready_button', this.utils.readyButtonClick, this, 0, 0, 0, 1);
+    this.readyButtn = this.add.button(700, 10, 'ready_button', this.utils.readyButtonClick, this, 0, 0, 0, 1);
     // this.computeButton = this.add.button(halfLine + 50,110, 'help_button',this.utils.helpButtonClick,this,0,0,1,0);
     this.helpButton = this.add.button(700, 60, 'help_button', this.utils.helpButtonClick, this, 0, 0, 1, 0);
 
@@ -390,7 +390,7 @@ PracticeGame.SurveyStateLearn2X.prototype.utils = {
             this.instructionText.setText("Ügyes vagy, ez a helyes válasz!\n Kattints a \"JÁTÉK\" gombra")
             this.helpButton.destroy()
             this.clearButton.destroy()
-            this.readyButton.destroy()
+            // this.readyButton.destroy()
             
       this.add.button(700, 10, 'backtogame_button', function(){
          //@todo this.multiplier separate to round counting 
