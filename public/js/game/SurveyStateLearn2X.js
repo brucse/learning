@@ -16,7 +16,7 @@ PracticeGame.SurveyStateLearn2X = function(game) {
     this.helpCountingTextGroup
     this.helpCountingTextGroupSetting
     this.answer = ""
-    this.multiplier = 10
+    this.multiplier = 4
     this.multiplicand = 2
     this.countedClick = 0
     this.clearButton
@@ -24,6 +24,8 @@ PracticeGame.SurveyStateLearn2X = function(game) {
     this.columnCounter = 0
     this.rowCounter = 0
     this.wheelCounter = 0
+    
+    this.affixMatrix = {1:"szer",2:"szer",3:"szor",4:"szer",5:"ször",6:"szor",7:"szer",8:"szor",9:"szer",10:"szer"}
 
 };
 
@@ -290,7 +292,7 @@ PracticeGame.SurveyStateLearn2X.prototype.utils = {
 
     helpButtonClick: function() {
         this.magicianButton.visible = true
-        this.instructionText.setText("Kattints " + this.multiplier.toString() + "-ször a bűvész cilinderére és kapsz " + this.multiplier.toString() + " biciklit.\n Ha megszámolod a kerekeket, megkapod az eredményt.")
+        this.instructionText.setText("Kattints " + this.multiplier.toString() + "-" + this.affixMatrix[this.multiplier] + " a bűvész cilinderére és kapsz " + this.multiplier.toString() + " biciklit.\n Ha megszámolod a kerekeket, megkapod az eredményt.")
         this.helpButton.destroy()
 
     },
