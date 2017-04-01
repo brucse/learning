@@ -16,8 +16,8 @@ PracticeGame.SurveyStateLearn2X = function(game) {
     this.helpCountingTextGroup
     this.helpCountingTextGroupSetting
     this.answer = ""
-    this.multiplier = 2
-    this.multiplicand = 9
+    this.multiplier = 10
+    this.multiplicand = 2
     this.countedClick = 0
     
     this.columnCounter = 0
@@ -50,17 +50,18 @@ PracticeGame.SurveyStateLearn2X.prototype.create = function() {
     this.wall = this.add.sprite(0, 0, 'wall');
     console.log('start')
         //add instruction text
-    this.instructionText = this.game.add.text(this.game.world.centerX, 20, "Ha tudod az eredményt, írd be és nyomd meg a \"Kész\" gombot. \nHa nem, nyomd meg a \"Segíts\" gombot", {
+    this.instructionText = this.game.add.text(10, 10, "Ha tudod az eredményt, írd be és nyomd meg a \"Kész\" gombot. \nHa nem, nyomd meg a \"Segíts\" gombot", {
         // this.instructionText = this.game.add.text(this.game.world.centerX, 20, "Kattints annyiszor a képre,\nahány bicikli kell a szorzáshoz!", {
         // this.instructionText = this.game.add.text(30, 30, "- Kattints annyiszor a képre, ahány bicikli kell a szorzáshoz!", {
-        font: "25px Arial",
+        font: "20px Arial",
         fill: "yellow",
-        align: "center"
+        align: "left"
     });
+    this.instructionText.width = 680
 
-    this.instructionText.anchor.setTo(0.5, 0);
+    // this.instructionText.anchor.setTo(0.5, 0);
 
-    this.questionText = this.game.add.text(this.game.world.centerX, 130, this.multiplier.toString() + " * " + this.multiplicand.toString()  + " = ", {
+    this.questionText = this.game.add.text(this.world.width/2, 110, this.multiplier.toString() + " * " + this.multiplicand.toString()  + " = ", {
         font: "30px Arial",
         fill: "yellow",
         align: "center"
@@ -69,18 +70,18 @@ PracticeGame.SurveyStateLearn2X.prototype.create = function() {
 
     this.physics.startSystem(Phaser.Physics.ARCADE);
 
-    this.readyButton = this.add.button(halfLine - 50, 100, 'ready_button', this.utils.readyButtonClick, this, 0, 0, 0, 1);
+    this.readyButton = this.add.button(700, 10, 'ready_button', this.utils.readyButtonClick, this, 0, 0, 0, 1);
     // this.computeButton = this.add.button(halfLine + 50,110, 'help_button',this.utils.helpButtonClick,this,0,0,1,0);
-    this.helpButton = this.add.button(halfLine + 50, 100, 'help_button', this.utils.helpButtonClick, this, 0, 0, 1, 0);
+    this.helpButton = this.add.button(700, 60, 'help_button', this.utils.helpButtonClick, this, 0, 0, 1, 0);
 
     // this.ready_button = this.add.button(halfLine, this.world.height - 30, 'ready_button', this.utils.clickOnReady, this, 0, 0, 1);
-    this.magicianButton = this.add.button(halfLine - 60, 170, 'magician', this.utils.clickOnMagician, this, 0, 0, 1);
+    this.magicianButton = this.add.button(700, 90, 'magician', this.utils.clickOnMagician, this, 0, 0, 1);
     this.magicianButton.visible = false
         // this.bicyleOnClick= this.add.button(halfLine - 60, 90, 'ready_button', this.utils.calculate, this, 0, 0, 1);
 
 
-    this.computeButton = this.add.button(halfLine - 60, 190, 'compute_button', this.utils.computeButtonClick, this, 0, 0, 1);
-    this.computeButton.visible = false
+    // this.computeButton = this.add.button(halfLine - 60, 190, 'compute_button', this.utils.computeButtonClick, this, 0, 0, 1);
+    // this.computeButton.visible = false
 
     this.bicycleGroup = this.add.group()
 
@@ -259,22 +260,24 @@ PracticeGame.SurveyStateLearn2X.prototype.utils = {
             // //   bicycleLineNum = 1 
             // //   computerImageXCount = 5 
             // }
-            var bicycle = this.bicycleGroup.create(this.bicycleCount * 60, 150, 'bicycle')
+            var bicycle = this.bicycleGroup.create(this.bicycleCount * 68, 150, 'bicycle')
             bicycle.events.onInputDown.add(this.utils.clickOnBicycle, this);
             bicycle.inputEnabled = true;
-            this.bicycleCount++
 
+            var bicycleNoWheel = this.bicycleNoWheelGroup.create(this.bicycleCount * 68, 150, 'bicycle_no_wheel')
+            bicycleNoWheel.visible = false
+            
+            this.bicycleCount++
         }
 
 
 
-
         if (this.bicycleCount == this.multiplier) {
-            this.instructionText.setText("Ha segítség kell a számoláshoz, kattints a \"Számol\" gombra.")
+            this.instructionText.setText("Ha segítség kell a számoláshoz, kattints a biciklikre.")
             this.magicianButton.destroy()
             this.helpButton.destroy()
             this.readyButton.destroy()
-            this.computeButton.visible = true
+            // this.computeButton.visible = true
         }
     },
 
@@ -285,6 +288,7 @@ PracticeGame.SurveyStateLearn2X.prototype.utils = {
     helpButtonClick: function() {
         this.magicianButton.visible = true
         this.instructionText.setText("Kattints " + this.multiplier.toString() + "-ször a bűvész cilinderére és kapsz " + this.multiplier.toString() + " biciklit.\n Ha megszámolod a kerekeket, megkapod az eredményt.")
+        this.helpButton.destroy()
 
     },
 
@@ -299,6 +303,11 @@ PracticeGame.SurveyStateLearn2X.prototype.utils = {
         var gridTopLeftCornerY = 150 + rowHeight + 20
         var bottomBorder = 5
         var counterTextLeftCornerX = 681
+        source.visible = false
+        var index = _.indexOf(this.bicycleGroup.children,source)
+        this.bicycleNoWheelGroup.children[index].visible = true
+
+
 
         this.countedClick++
             var i = this.countedClick
@@ -317,6 +326,9 @@ PracticeGame.SurveyStateLearn2X.prototype.utils = {
             }
             else if (this.bicycleCount * this.multiplicand == this.wheelCounter) {
                 var counterText = this.game.add.text(counterTextLeftCornerX, rowY, this.columnCounter.toString(), this.helpCountingTextGroupSetting)
+        this.instructionText.width = 680
+        this.instructionText.font = "15px Arial"
+        this.instructionText.setText("Most már könnyű megszámolni. \n Írd be az eredményt, \n azután nyomd meg a \"Kész\" gombot!")
 
             }
 
@@ -347,20 +359,22 @@ PracticeGame.SurveyStateLearn2X.prototype.utils = {
 
         // this.add.text(400,300,"10",this.helpCountingTextGroupSetting)
         // this.add.text(400,350,"20",this.helpCountingTextGroupSetting)
-        this.instructionText.setText("Most már könnyű megszámolni. Írd be az eredményt, azután nyomd meg a \"Kész\" gombot!")
-        this.readyButton = this.add.button(this.world.width / 2 - 50, 110, 'ready_button', this.utils.readyButtonClick, 0, 0, 1);
-        this.computeButton.destroy()
+        // this.instructionText.setText("Most már könnyű megszámolni. Írd be az eredményt, azután nyomd meg a \"Kész\" gombot!")
+        // this.instructionText.width = 680
+        // this.readyButton = this.add.button(700, 10, 'ready_button', this.utils.readyButtonClick, 0, 0, 1);
+    this.readyButton = this.add.button(700, 10, 'ready_button', this.utils.readyButtonClick, this, 0, 0, 0, 1);
+        // this.computeButton.destroy()
 
     },
 
     keyPress: function(char) {
         this.answer = this.answer + char
         console.log(this.answer)
-        this.questionText.setText("2 * 5 = " + this.answer)
+        this.questionText.setText(this.multiplier.toString() + " * " + this.multiplicand.toString() +  " = " + this.answer)
     },
 
     readyButtonClick: function() {
-        if (this.answer == '10') {
+        if (this.answer == (this.multiplier * this.multiplicand).toString()) {
             this.instructionText.setText("Ügyes vagy, ez a helyes válasz!")
         }
     }
