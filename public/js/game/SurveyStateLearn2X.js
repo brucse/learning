@@ -19,6 +19,7 @@ PracticeGame.SurveyStateLearn2X = function(game) {
     this.multiplier = 10
     this.multiplicand = 2
     this.countedClick = 0
+    this.clearButton
     
     this.columnCounter = 0
     this.rowCounter = 0
@@ -40,6 +41,7 @@ PracticeGame.SurveyStateLearn2X.prototype.preload = function() {
     this.load.spritesheet('ready_button', 'assets/ready_button_sheet.png', 45, 23);
     this.load.spritesheet('compute_button', 'assets/compute_button_sheet.png', 72, 23);
     this.load.spritesheet('help_button', 'assets/help_button_sheet.png', 72, 23);
+    this.load.spritesheet('clear_button', 'assets/clear_button_sheet.png', 72, 23);
     this.load.image('wall', 'assets/sky1.png');
 }
 
@@ -50,7 +52,7 @@ PracticeGame.SurveyStateLearn2X.prototype.create = function() {
     this.wall = this.add.sprite(0, 0, 'wall');
     console.log('start')
         //add instruction text
-    this.instructionText = this.game.add.text(10, 10, "Ha tudod az eredményt, írd be és nyomd meg a \"Kész\" gombot. \nHa nem, nyomd meg a \"Segíts\" gombot", {
+    this.instructionText = this.game.add.text(10, 10, "Ha tudod az eredményt, írd be és nyomd meg a \"Kész\" gombot. \nHa nem, nyomd meg a \"Segíts\" gombot \n Ha elrontottad az eredményt, használd a \"TÖRÖL\" gombot.", {
         // this.instructionText = this.game.add.text(this.game.world.centerX, 20, "Kattints annyiszor a képre,\nahány bicikli kell a szorzáshoz!", {
         // this.instructionText = this.game.add.text(30, 30, "- Kattints annyiszor a képre, ahány bicikli kell a szorzáshoz!", {
         font: "20px Arial",
@@ -75,10 +77,11 @@ PracticeGame.SurveyStateLearn2X.prototype.create = function() {
     this.helpButton = this.add.button(700, 60, 'help_button', this.utils.helpButtonClick, this, 0, 0, 1, 0);
 
     // this.ready_button = this.add.button(halfLine, this.world.height - 30, 'ready_button', this.utils.clickOnReady, this, 0, 0, 1);
-    this.magicianButton = this.add.button(700, 90, 'magician', this.utils.clickOnMagician, this, 0, 0, 1);
+    this.magicianButton = this.add.button(700, 60, 'magician', this.utils.clickOnMagician, this, 0, 0, 1);
     this.magicianButton.visible = false
         // this.bicyleOnClick= this.add.button(halfLine - 60, 90, 'ready_button', this.utils.calculate, this, 0, 0, 1);
 
+    this.clearButton = this.add.button(700, 110, 'clear_button', this.utils.clearButtonClick, this, 0, 0, 1);
 
     // this.computeButton = this.add.button(halfLine - 60, 190, 'compute_button', this.utils.computeButtonClick, this, 0, 0, 1);
     // this.computeButton.visible = false
@@ -377,6 +380,11 @@ PracticeGame.SurveyStateLearn2X.prototype.utils = {
         if (this.answer == (this.multiplier * this.multiplicand).toString()) {
             this.instructionText.setText("Ügyes vagy, ez a helyes válasz!")
         }
+    },
+    
+    clearButtonClick : function(){
+       this.answer = "" 
+        this.questionText.setText(this.multiplier.toString() + " * " + this.multiplicand.toString() +  " = " + this.answer)
     }
 
 
