@@ -7,16 +7,18 @@ PracticeGame.ShootingState = function(game) {
     this.shotCounter = 0
     this.round
     this.surveyCount = 1
+    this.frameCount = 0
+    this.robberVelocity = 80
 
 };
 
 PracticeGame.ShootingState.prototype = Object.create(PracticeGameBaseState.prototype)
 
-PracticeGame.ShootingState.prototype.init = function(round,newSurvey){
-    
+PracticeGame.ShootingState.prototype.init = function(round, newSurvey) {
+
     this.shotCounter = 0
     this.round = round
-    if(newSurvey){
+    if (newSurvey) {
         this.surveyCount++
     }
 }
@@ -30,7 +32,7 @@ PracticeGame.ShootingState.prototype.preload = function() {
     this.load.spritesheet('policeman', 'assets/policeman_animation_shooting.png', 34, 68);
     // this.load.spritesheet('gun', 'assets/gun.png', 24, 45);
     this.load.spritesheet('bullet', 'assets/bullet.png', 12, 16);
-    
+
 }
 
 
@@ -40,19 +42,19 @@ PracticeGame.ShootingState.prototype.create = function() {
     this.wall = this.add.sprite(0, 0, 'wall');
 
     //  Creates 30 bullets, using the 'bullet' graphic
-    this.weapon= this.game.add.weapon(3, 'bullet');
+    this.weapon = this.game.add.weapon(3, 'bullet');
 
     //  The bullet will be automatically killed when it leaves the world bounds
     this.weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
 
     //  The speed at which the bullet is fired
-    this.weapon.bulletSpeed = 600;
+    this.weapon.bulletSpeed = 1000;
 
     //  Speed-up the rate of fire, allowing them to shoot 1 bullet every 60ms
     this.weapon.fireRate = 100;
-    this.weapon.bullets.enableBody  = true
+    this.weapon.bullets.enableBody = true
     this.game.physics.arcade.enable(this.weapon.bullets)
-    // this.bullet.physicsBodyType = Phaser.Physics.ARCADE;
+        // this.bullet.physicsBodyType = Phaser.Physics.ARCADE;
 
     // this.bullet.angle = 90
 
@@ -61,11 +63,11 @@ PracticeGame.ShootingState.prototype.create = function() {
     this.game.physics.arcade.enable(this.policeman);
 
     // this.gun.body.drag.set(70);
-    this.policeman.body.maxVelocity.set(200);
+    // this.policeman.body.maxVelocity.set(200);
     this.policeman.anchor.setTo(0, 0);
     //  this.gun.angle = -90
     this.weapon.bulletAngleOffset = 90;
-    
+
 
 
     this.policeman.animations.add('right', [0, 1, 2], 15, true);
@@ -80,25 +82,26 @@ PracticeGame.ShootingState.prototype.create = function() {
     //  But the 'true' argument tells the weapon to track sprite rotation
     this.weapon.trackSprite(this.policeman, 27, 3, false);
 
-    this.robber = this.add.sprite(this.world.width / 2,this.world.height - 350, 'robber')
+    this.robber = this.add.sprite(this.world.width / 2, this.world.height - 350, 'robber')
     this.game.physics.arcade.enable(this.robber);
     this.robber.enableBody = true
     this.robber.body.collideWorldBounds = true;
     // this.robber.body.onWorldBounds = new Phaser.Signal();
     this.robber.body.bounce.x = 1
-    this.robber.body.velocity.x = 150
-    
-    
+    this.robber.body.velocity.x = this.robberVelocity 
+    this.robber.body.immovable = true
+
+
     this.robber.animations.add('right', [0, 1, 2], 15, true);
     this.robber.animations.add('left', [4, 5, 6], 15, true);
     this.robber.animations.add('stop', [3], 15, false);
     this.robber.animations.add('dead', [7], 15, false);
 
-    
+
     this.cursors = this.input.keyboard.createCursorKeys();
 
     this.fireButton = this.input.keyboard.addKey(Phaser.KeyCode.SPACEBAR);
-    
+
 
 
 
@@ -116,12 +119,12 @@ PracticeGame.ShootingState.prototype.update = function() {
     if (this.cursors.left.isDown) {
         // this.gun.body.angularVelocity = -300;
 
-        this.policeman.body.velocity.x = -150;
+        this.policeman.body.velocity.x = -200;
         this.policeman.animations.play('left');
     }
     else if (this.cursors.right.isDown) {
         // this.gun.body.angularVelocity = 300;
-        this.policeman.body.velocity.x = 150;
+        this.policeman.body.velocity.x = 200;
         this.policeman.animations.play('right');
     }
     else {
@@ -135,25 +138,39 @@ PracticeGame.ShootingState.prototype.update = function() {
         this.weapon.fire();
     }
 
-// game.physics.arcade.collide(stars, platforms);
+    // game.physics.arcade.collide(stars, platforms);
     // this.game.world.wrap(this.policeman, 16);    
     //bullet detection
-    
-    if( this.robber.body.velocity.x > 0){
+
+    if (this.robber.body.velocity.x > 0) {
         this.robber.animations.play('right')
-    }else if(this.robber.body.velocity.x < 0){
+    }
+    else if (this.robber.body.velocity.x < 0) {
         this.robber.animations.play('left')
-    }else if(this.robber.body.velocity.x = 0){
+    }
+    else if (this.robber.body.velocity.x = 0) {
         this.robber.animations.play('stop')
     }
-    this.game.physics.arcade.overlap(this.weapon.bullets, this.robber, this.detectBullet, null, this);
-	this.game.physics.arcade.overlap(this.robber, this.policeman, function(){
-	   // this.surveyCount++ 
-		this.game.state.start('SurveyStateLearn2X',true,false,this.surveyCount);
-	},null,this)
+    this.game.physics.arcade.collide(this.weapon.bullets, this.robber, this.detectBullet, null, this);
+    this.game.physics.arcade.overlap(this.robber, this.policeman, function() {
+        // this.surveyCount++ 
+        this.game.state.start('SurveyStateLearn2X', true, false, this.surveyCount);
+    }, null, this)
+    
+    if(this.frameCount >= 60){
+        var rnd = (this.game.rnd.pick([-1,1]))
+        this.robber.body.velocity.x = this.robberVelocity * rnd 
+        if(rnd > 0 ){
+            this.robber.animations.play('right')
+        }else{
+            this.robber.animations.play('left')
+        }
+        this.frameCount = 0
+    }
+    this.frameCount++
 }
 
-PracticeGame.ShootingState.prototype.render = function(){
+PracticeGame.ShootingState.prototype.render = function() {
     //   this.game.debug.body(this.robber);
     //   this.game.debug.spriteInfo(this.policeman,20,20);
     //   this.game.debug.body(this.weapon.bullets);
@@ -161,22 +178,24 @@ PracticeGame.ShootingState.prototype.render = function(){
     //   this.game.debug.bodyInfo(this.robber, 132, 132);
     // this.game.debug.text(this.shotCounter + ' talalat ' , 2,14,'#ff0')
 }
-PracticeGame.ShootingState.prototype.detectBullet = function(bullets,robber){
+PracticeGame.ShootingState.prototype.detectBullet = function(bullets, robber) {
     console.log('bullet shot')
     this.robber.body.velocity.x = 0
     this.robber.animations.play('dead');
     var timer = this.game.time.create()
-    timer.add(Phaser.Timer.SECOND * 1, function(){
-    this.robber.body.velocity.x = 150
-    console.log('ressurrection')
-    this.robber.animations.play('stop');
+    timer.add(Phaser.Timer.SECOND * 0.5, function() {
+        this.robber.body.velocity.x = this.robberVelocity
+        console.log('ressurrection')
+        this.weapon.killAll()
+        this.shotCounter++
+            this.robber.animations.play('stop');
+
+        if (this.shotCounter >= 3) {
+            // 		this.game.state.start('SurveyState2X');
+            this.round++
+                this.game.state.start('ShootingState', true, false, this.round, false);
+        }
+
     }, this);
     timer.start()
-    this.weapon.killAll()
-    this.shotCounter++
-    if(this.shotCounter >= 5)  {
-// 		this.game.state.start('SurveyState2X');
-        this.round++
-		this.game.state.start('ShootingState',true,false,this.round,false);
-    }
 }
