@@ -46,6 +46,11 @@ PracticeGame.SurveyStateLearn2X.prototype = Object.create(PracticeGameBaseState.
 PracticeGame.SurveyStateLearn2X.prototype.init = function(surveyCount) {
     this.multiplier = surveyCount
     this.answer = ""
+    this.bicycleCount = 0
+    this.countedClick = 0
+    this.columnCounter = 0
+    this.rowCounter = 0
+    this.wheelCounter = 0
 }
 
 PracticeGame.SurveyStateLearn2X.prototype.preload = function() {
@@ -144,7 +149,7 @@ PracticeGame.SurveyStateLearn2X.prototype.utils = {
             bicycle.inputEnabled = true;
 
             var bicycleNoWheel = this.bicycleNoWheelGroup.create(this.bicycleCount * 68, 150, 'bicycle_no_wheel')
-            bicycleNoWheel.visible = false
+            bicycleNoWheel.visible = true 
 
             this.bicycleCount++
         }
@@ -155,7 +160,7 @@ PracticeGame.SurveyStateLearn2X.prototype.utils = {
             this.instructionText.setText("Ha segítség kell a számoláshoz, kattints a biciklikre.")
             this.magicianButton.destroy()
             this.helpButton.destroy()
-            this.readyButton.destroy()
+            // this.readyButton.destroy()
                 // this.computeButton.visible = true
         }
     },

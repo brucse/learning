@@ -14,12 +14,19 @@ PracticeGame.ShootingState = function(game) {
 
 PracticeGame.ShootingState.prototype = Object.create(PracticeGameBaseState.prototype)
 
-PracticeGame.ShootingState.prototype.init = function(round, newSurvey) {
+PracticeGame.ShootingState.prototype.init = function(round, newSurvey,newGame) {
 
     this.shotCounter = 0
+    if(this.surveyCount > 10 ){
+		this.game.state.start('GrandFinaleState');
+    }
     this.round = round
-    if (newSurvey) {
+    if (newSurvey && !newGame) {
         this.surveyCount++
+    }
+    
+    if(newGame){
+        this.surveyCount = 1
     }
 }
 
