@@ -9,6 +9,7 @@ PracticeGame.GrandFinaleState = function(game) {
     this.surveyCount = 1
     this.prisonCell
     this.newgameButton
+    this.surveyType
 
 };
 
@@ -35,6 +36,9 @@ PracticeGame.GrandFinaleState.prototype.preload = function() {
 }
 
 
+PracticeGame.GrandFinaleState.prototype.init = function(surveyType) {
+    this.surveyType = surveyType
+}
 PracticeGame.GrandFinaleState.prototype.create = function() {
 
     this.game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -129,7 +133,7 @@ PracticeGame.GrandFinaleState.prototype.render = function(){
 
 PracticeGame.GrandFinaleState.prototype.newgameButtonClick = function(){
 
-		this.game.state.start('ShootingState',true,false,1,true,true);
+		this.game.state.start('ShootingState',true,false,1,true,true,this.surveyType);
 }
 // PracticeGame.GrandFinaleState.prototype.robberInTheCage = function robberInTheCage(){
     

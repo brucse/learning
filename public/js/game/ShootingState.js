@@ -15,18 +15,27 @@ PracticeGame.ShootingState = function(game) {
 
 PracticeGame.ShootingState.prototype = Object.create(PracticeGameBaseState.prototype)
 
-PracticeGame.ShootingState.prototype.init = function(round, newSurvey,newGame,surveyType) {
+PracticeGame.ShootingState.prototype.init = function(round, newSurvey, newGame, surveyType) {
     this.surveyType = surveyType
+    var surveyCountMax
+    if (this.surveyType == 'mult2') {
+        surveyCountMax = 10
+    }
+    else if (this.surveyType == 'div2part1') {
+        surveyCountMax = 5
+    }
+
+
     this.shotCounter = 0
-    if(this.surveyCount > 10 ){
-		this.game.state.start('GrandFinaleState');
+    if (this.surveyCount > surveyCountMax) {
+        this.game.state.start('GrandFinaleState',true,false,this.surveyType);
     }
     this.round = round
     if (newSurvey && !newGame) {
         this.surveyCount++
     }
-    
-    if(newGame){
+
+    if (newGame) {
         this.surveyCount = 1
     }
 }
@@ -69,6 +78,8 @@ PracticeGame.ShootingState.prototype.create = function() {
     this.policeman = this.add.sprite(this.world.width / 2, this.world.height - 68 * this.round, 'policeman')
 
     this.game.physics.arcade.enable(this.policeman);
+    this.policeman.enableBody = true
+    this.policeman.body.collideWorldBounds = true;
 
     // this.gun.body.drag.set(70);
     // this.policeman.body.maxVelocity.set(200);
@@ -96,7 +107,7 @@ PracticeGame.ShootingState.prototype.create = function() {
     this.robber.body.collideWorldBounds = true;
     // this.robber.body.onWorldBounds = new Phaser.Signal();
     this.robber.body.bounce.x = 1
-    this.robber.body.velocity.x = this.robberVelocity 
+    this.robber.body.velocity.x = this.robberVelocity
     this.robber.body.immovable = true
 
 
@@ -162,19 +173,21 @@ PracticeGame.ShootingState.prototype.update = function() {
     this.game.physics.arcade.collide(this.weapon.bullets, this.robber, this.detectBullet, null, this);
     this.game.physics.arcade.overlap(this.robber, this.policeman, function() {
         // this.surveyCount++ 
-        if(this.surveyType == 'mult2'){
-            this.game.state.start('SurveyStateLearn2X', true, false, this.surveyCount);
-        }else if(this.surveyType == 'div2part1'){
-            this.game.state.start('SurveyStateLearn2Div', true, false, this.surveyCount);
+        if (this.surveyType == 'mult2') {
+            this.game.state.start('SurveyStateLearn2X', true, false, this.surveyCount,this.surveyCount);
+        }
+        else if (this.surveyType == 'div2part1') {
+            this.game.state.start('SurveyStateLearn2Div', true, false, this.surveyCount,this.surveyType);
         }
     }, null, this)
-    
-    if(this.frameCount >= 60){
-        var rnd = (this.game.rnd.pick([-1,1]))
-        this.robber.body.velocity.x = this.robberVelocity * rnd 
-        if(rnd > 0 ){
+
+    if (this.frameCount >= 60) {
+        var rnd = (this.game.rnd.pick([-1, 1]))
+        this.robber.body.velocity.x = this.robberVelocity * rnd
+        if (rnd > 0) {
             this.robber.animations.play('right')
-        }else{
+        }
+        else {
             this.robber.animations.play('left')
         }
         this.frameCount = 0
@@ -205,7 +218,7 @@ PracticeGame.ShootingState.prototype.detectBullet = function(bullets, robber) {
         if (this.shotCounter >= 3) {
             // 		this.game.state.start('SurveyState2X');
             this.round++
-                this.game.state.start('ShootingState', true, false, this.round, false);
+                this.game.state.start('ShootingState', true, false, this.round, false,false,this.surveyType);
         }
 
     }, this);

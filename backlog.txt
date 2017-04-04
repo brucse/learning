@@ -1,4 +1,5 @@
 bugs:
+    - why should click twice on the uj jatek button?
 	- aircraft counting wrong in case of 100	
 		
 features:

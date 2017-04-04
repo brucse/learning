@@ -33,6 +33,8 @@ PracticeGame.SurveyStateLearn2Div = function(game) {
 
     this.columnCounterLand = 0
     this.rowCounterLand = 0
+    this.surveyType
+    
 
     this.affixMatrix = {
         1: "szer",
@@ -52,7 +54,7 @@ PracticeGame.SurveyStateLearn2Div = function(game) {
 PracticeGame.SurveyStateLearn2Div.prototype = Object.create(PracticeGameBaseState.prototype)
 
 
-PracticeGame.SurveyStateLearn2Div.prototype.init = function(surveyCount) {
+PracticeGame.SurveyStateLearn2Div.prototype.init = function(surveyCount,surveyType) {
     // this.multiplier = surveyCount
     this.dividend = this.divider * surveyCount
     this.answer = ""
@@ -64,6 +66,8 @@ PracticeGame.SurveyStateLearn2Div.prototype.init = function(surveyCount) {
 
     this.columnCounterLand = 0
     this.rowCounterLand = 0
+    this.surveyType = surveyType
+    this.aircraftCount = 0
 }
 
 PracticeGame.SurveyStateLearn2Div.prototype.preload = function() {
@@ -118,7 +122,7 @@ PracticeGame.SurveyStateLearn2Div.prototype.create = function() {
     this.magicianButton = this.add.button(700, 60, 'magician', this.utils.clickOnMagician, this, 0, 0, 1);
     this.magicianButton.visible = false
 
-    this.controlOfficerButton = this.add.button(700, 60, 'control_officer', this.utils.clickOnControlOfficer, this, 0, 0, 1);
+    this.controlOfficerButton = this.add.button(700, 45, 'control_officer', this.utils.clickOnControlOfficer, this, 0, 0, 1);
     this.controlOfficerButton.visible = false
 
     this.clearButton = this.add.button(700, 110, 'clear_button', this.utils.clearButtonClick, this, 0, 0, 1);
@@ -166,14 +170,14 @@ PracticeGame.SurveyStateLearn2Div.prototype.utils = {
                     this.rowCounter++
                         this.columnCounter = 0
                 }
-                else
-            if (this.dividend == this.aircraftCount) {
+                
+                if (this.dividend == this.aircraftCount) {
                 var counterText = this.game.add.text(counterTextLeftCornerX, rowY, this.columnCounter.toString(), this.helpCountingTextGroupSetting)
                     // counterText.font = "4px Arial"
                 this.instructionText.width = 680
-                this.instructionText.font = "15px Arial"
+                this.instructionText.font = "13px Arial"
                     // this.instructionText.setText("Most már könnyű megszámolni. \n Írd be az eredményt, \n azután nyomd meg a \"Kész\" gombot!")
-                this.instructionText.setText("Kattints a repülés irányítóra és \nminden leszállópályára ugyanannyi gép fog leszállni " +
+                this.instructionText.setText("Kattints a repülés irányítóra.\nMinden leszállópályára ugyanannyi gép fog leszállni" +
                     "\nSzámold meg, egy pályán hány gép van és megkapod \naz eredményt")
                 this.magicianButton.destroy()
                 this.controlOfficerButton.visible = true
@@ -294,11 +298,11 @@ PracticeGame.SurveyStateLearn2Div.prototype.utils = {
         this.questionText.fill = "yellow"
         this.answer = this.answer + char
         console.log(this.answer)
-        this.questionText.setText(this.multiplier.toString() + " * " + this.multiplicand.toString() + " = " + this.answer)
+        this.questionText.setText(this.dividend.toString() + " : " + this.divider.toString() + " = " + this.answer)
     },
 
     readyButtonClick: function() {
-        if (this.answer == (this.multiplier * this.multiplicand).toString()) {
+        if (this.answer == (this.dividend / this.divider).toString()) {
             this.instructionText.setText("Ügyes vagy, ez a helyes válasz!\n Kattints a \"JÁTÉK\" gombra")
             this.helpButton.destroy()
             this.clearButton.destroy()
@@ -306,7 +310,7 @@ PracticeGame.SurveyStateLearn2Div.prototype.utils = {
 
             this.add.button(700, 10, 'backtogame_button', function() {
                 //@todo this.multiplier separate to round counting 
-                this.game.state.start('ShootingState', true, false, 1, true);
+                this.game.state.start('ShootingState', true, false, 1, true,false,this.surveyType);
             }, this, 0, 0, 0, 1);
         }
         else {
@@ -317,11 +321,11 @@ PracticeGame.SurveyStateLearn2Div.prototype.utils = {
 
     clearButtonClick: function() {
         this.answer = ""
-        this.questionText.setText(this.multiplier.toString() + " * " + this.multiplicand.toString() + " = " + this.answer)
+        this.questionText.setText(this.dividend.toString() + " : " + this.divider.toString() + " = " + this.answer)
         this.questionText.fill = "yellow"
     },
 
-    clickOnControlOfficer: function() {
+    clickOnControlOfficer: function(source) {
         var aircraftGroup = this.aircraftGroup
         var aircraftNum = this.dividend / this.divider
         var aircraftLandedCount = 0
@@ -347,6 +351,7 @@ PracticeGame.SurveyStateLearn2Div.prototype.utils = {
               aircraftLandedCount++
           }
         })
+        source.destroy()
     }
 
 
