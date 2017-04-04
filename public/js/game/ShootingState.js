@@ -10,6 +10,7 @@ PracticeGame.ShootingState = function(game) {
     this.frameCount = 0
     this.robberVelocity = 80
     this.surveyType
+    this.robberLastPositionX
 
 };
 
@@ -18,17 +19,22 @@ PracticeGame.ShootingState.prototype = Object.create(PracticeGameBaseState.proto
 PracticeGame.ShootingState.prototype.init = function(round, newSurvey, newGame, surveyType) {
     this.surveyType = surveyType
     var surveyCountMax
-    if (this.surveyType == 'mult2') {
+    if (this.surveyType == 'mult2part1') {
+        surveyCountMax = 5
+    }else if(this.surveyType == 'mult2part2'){
         surveyCountMax = 10
     }
     else if (this.surveyType == 'div2part1') {
         surveyCountMax = 5
     }
+    else if (this.surveyType == 'div2part2') {
+        surveyCountMax = 10
+    }
 
 
     this.shotCounter = 0
     if (this.surveyCount > surveyCountMax) {
-        this.game.state.start('GrandFinaleState',true,false,this.surveyType);
+        this.game.state.start('GrandFinaleState', true, false, this.surveyType);
     }
     this.round = round
     if (newSurvey && !newGame) {
@@ -36,7 +42,18 @@ PracticeGame.ShootingState.prototype.init = function(round, newSurvey, newGame, 
     }
 
     if (newGame) {
-        this.surveyCount = 1
+        if (this.surveyType == 'mult2part1') {
+            this.surveyCount = 1
+        }else if(this.surveyType == 'mult2part2'){
+            this.surveyCount = 6
+        }
+        else if (this.surveyType == 'div2part1') {
+            this.surveyCount = 1
+        }
+        else if (this.surveyType == 'div2part2') {
+            this.surveyCount = 6
+        }
+        // this.surveyCount = 1
     }
 }
 
@@ -75,7 +92,7 @@ PracticeGame.ShootingState.prototype.create = function() {
 
     // this.bullet.angle = 90
 
-    this.policeman = this.add.sprite(this.world.width / 2, this.world.height - 68 * this.round, 'policeman')
+    this.policeman = this.add.sprite(this.world.width / 2, this.world.height - 72 * this.round, 'policeman')
 
     this.game.physics.arcade.enable(this.policeman);
     this.policeman.enableBody = true
@@ -109,6 +126,9 @@ PracticeGame.ShootingState.prototype.create = function() {
     this.robber.body.bounce.x = 1
     this.robber.body.velocity.x = this.robberVelocity
     this.robber.body.immovable = true
+    if(this.robberLastPositionX != null){
+        this.robber.position.x = this.robberLastPositionX
+    }
 
 
     this.robber.animations.add('right', [0, 1, 2], 15, true);
@@ -171,13 +191,13 @@ PracticeGame.ShootingState.prototype.update = function() {
         this.robber.animations.play('stop')
     }
     this.game.physics.arcade.collide(this.weapon.bullets, this.robber, this.detectBullet, null, this);
-    this.game.physics.arcade.overlap(this.robber, this.policeman, function() {
+    this.game.physics.arcade.collide(this.robber, this.policeman, function() {
         // this.surveyCount++ 
-        if (this.surveyType == 'mult2') {
-            this.game.state.start('SurveyStateLearn2X', true, false, this.surveyCount,this.surveyType);
+        if (this.surveyType == 'mult2part1' || this.surveyType == 'mult2part2') {
+            this.game.state.start('SurveyStateLearn2X', true, false, this.surveyCount, this.surveyType);
         }
-        else if (this.surveyType == 'div2part1') {
-            this.game.state.start('SurveyStateLearn2Div', true, false, this.surveyCount,this.surveyType);
+        else if (this.surveyType == 'div2part1' || this.surveyType == 'div2part2') {
+            this.game.state.start('SurveyStateLearn2Div', true, false, this.surveyCount, this.surveyType);
         }
     }, null, this)
 
@@ -209,17 +229,19 @@ PracticeGame.ShootingState.prototype.detectBullet = function(bullets, robber) {
     this.robber.animations.play('dead');
     var timer = this.game.time.create()
     timer.add(Phaser.Timer.SECOND * 0.5, function() {
+        //@TODO what's that?
         this.robber.body.velocity.x = this.robberVelocity
         console.log('ressurrection')
         this.weapon.killAll()
         this.shotCounter++
             this.robber.animations.play('stop');
 
-        if (this.shotCounter >= 3) {
+        // if (this.shotCounter >= 3) {
             // 		this.game.state.start('SurveyState2X');
             this.round++
-                this.game.state.start('ShootingState', true, false, this.round, false,false,this.surveyType);
-        }
+            this.robberLastPositionX = robber.position.x
+                this.game.state.start('ShootingState', true, false, this.round, false, false, this.surveyType);
+        // }
 
     }, this);
     timer.start()
