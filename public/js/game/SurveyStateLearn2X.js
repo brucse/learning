@@ -198,7 +198,8 @@ PracticeGame.SurveyStateLearn2X.prototype.utils = {
             var i = this.countedClick
 
         // for (var i = 1; i <= this.bicycleCount * this.multiplicand;) {
-        for (var i = 1; i <= this.multiplicand; i++) {
+        // for (var i = 1; i <= this.multiplicand; i++) {
+        for (var i = 1; i <= 100; i++) {
             var rowY = gridTopLeftCornerY + this.rowCounter * rowHeight
             var bicycleWheel = this.bicycleWheelGroup.create(gridTopLeftCornerX + this.columnCounter * columnWidth, rowY, 'bicycle_wheel')
             this.columnCounter++

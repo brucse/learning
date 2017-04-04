@@ -1,12 +1,8 @@
-main goal: capable to practice addition and subtraction
-	- re-think game-status design pattern
-	- determine worflow for
-		-actual learning : only the check mode works, start page links to different surveys, survey loading depends on the start choosing 
-		-multiplication and division: 
-			introduction and engrave mode - checking system which item wasn't learned and repeat it. after that checking mode includes all items again
-			implement help system: after the time limit or need help button shows help to continue
-	- better game turn - game experience and technically either
-	- set openshift to express 4
+bugs:
+	- aircraft counting wrong in case of 100	
+		
+features:
+
 	- size the screen better
 	
 	

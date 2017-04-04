@@ -9,13 +9,14 @@ PracticeGame.ShootingState = function(game) {
     this.surveyCount = 1
     this.frameCount = 0
     this.robberVelocity = 80
+    this.surveyType
 
 };
 
 PracticeGame.ShootingState.prototype = Object.create(PracticeGameBaseState.prototype)
 
-PracticeGame.ShootingState.prototype.init = function(round, newSurvey,newGame) {
-
+PracticeGame.ShootingState.prototype.init = function(round, newSurvey,newGame,surveyType) {
+    this.surveyType = surveyType
     this.shotCounter = 0
     if(this.surveyCount > 10 ){
 		this.game.state.start('GrandFinaleState');
@@ -161,7 +162,11 @@ PracticeGame.ShootingState.prototype.update = function() {
     this.game.physics.arcade.collide(this.weapon.bullets, this.robber, this.detectBullet, null, this);
     this.game.physics.arcade.overlap(this.robber, this.policeman, function() {
         // this.surveyCount++ 
-        this.game.state.start('SurveyStateLearn2X', true, false, this.surveyCount);
+        if(this.surveyType == 'mult2'){
+            this.game.state.start('SurveyStateLearn2X', true, false, this.surveyCount);
+        }else if(this.surveyType == 'div2part1'){
+            this.game.state.start('SurveyStateLearn2Div', true, false, this.surveyCount);
+        }
     }, null, this)
     
     if(this.frameCount >= 60){
