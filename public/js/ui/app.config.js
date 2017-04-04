@@ -91,10 +91,12 @@ module('learnG').controller('surveyController', function($scope, $routeParams, $
 		
 		// game.state.start('InitState');
 		// game.state.start('SurveyState');
-		game.state.start('ShootingState',true,false,1,true,true,surveyType);
 		// game.state.start('SurveyStateLearn2X',true,false,1);
 		// game.state.start('SurveyStateLearn2Div',true,false,1);
 		// game.state.start('GrandFinaleState');
+		
+		
+		game.state.start('ShootingState',true,false,1,true,true,surveyType);
 
 	// })
 

@@ -174,7 +174,7 @@ PracticeGame.ShootingState.prototype.update = function() {
     this.game.physics.arcade.overlap(this.robber, this.policeman, function() {
         // this.surveyCount++ 
         if (this.surveyType == 'mult2') {
-            this.game.state.start('SurveyStateLearn2X', true, false, this.surveyCount,this.surveyCount);
+            this.game.state.start('SurveyStateLearn2X', true, false, this.surveyCount,this.surveyType);
         }
         else if (this.surveyType == 'div2part1') {
             this.game.state.start('SurveyStateLearn2Div', true, false, this.surveyCount,this.surveyType);

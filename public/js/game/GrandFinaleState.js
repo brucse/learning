@@ -133,7 +133,9 @@ PracticeGame.GrandFinaleState.prototype.render = function(){
 
 PracticeGame.GrandFinaleState.prototype.newgameButtonClick = function(){
 
-		this.game.state.start('ShootingState',true,false,1,true,true,this.surveyType);
+// 		this.game.state.start('ShootingState',true,false,1,true,true,this.surveyType);
+window.location.href = "/"
+// 		window.open("/", "_blank")
 }
 // PracticeGame.GrandFinaleState.prototype.robberInTheCage = function robberInTheCage(){
     

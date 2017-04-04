@@ -4,6 +4,7 @@ bugs:
 		
 features:
 
+    - a biciklikerekek mozogva menjenek a szamolasi helyukre
 	- size the screen better
 	
 	

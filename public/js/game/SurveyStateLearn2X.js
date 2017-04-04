@@ -24,6 +24,7 @@ PracticeGame.SurveyStateLearn2X = function(game) {
     this.columnCounter = 0
     this.rowCounter = 0
     this.wheelCounter = 0
+    this.surveyType
 
     this.affixMatrix = {
         1: "szer",
@@ -43,7 +44,7 @@ PracticeGame.SurveyStateLearn2X = function(game) {
 PracticeGame.SurveyStateLearn2X.prototype = Object.create(PracticeGameBaseState.prototype)
 
 
-PracticeGame.SurveyStateLearn2X.prototype.init = function(surveyCount) {
+PracticeGame.SurveyStateLearn2X.prototype.init = function(surveyCount,surveyType) {
     this.multiplier = surveyCount
     this.answer = ""
     this.bicycleCount = 0
@@ -51,6 +52,7 @@ PracticeGame.SurveyStateLearn2X.prototype.init = function(surveyCount) {
     this.columnCounter = 0
     this.rowCounter = 0
     this.wheelCounter = 0
+    this.surveyType = surveyType
 }
 
 PracticeGame.SurveyStateLearn2X.prototype.preload = function() {
@@ -242,7 +244,7 @@ PracticeGame.SurveyStateLearn2X.prototype.utils = {
 
             this.add.button(700, 10, 'backtogame_button', function() {
                 //@todo this.multiplier separate to round counting 
-                this.game.state.start('ShootingState', true, false, 1, true);
+                this.game.state.start('ShootingState', true, false, 1, true,false,this.surveyType);
             }, this, 0, 0, 0, 1);
         }else{
             this.questionText.fill = "red"

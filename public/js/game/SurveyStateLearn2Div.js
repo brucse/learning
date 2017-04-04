@@ -74,7 +74,8 @@ PracticeGame.SurveyStateLearn2Div.prototype.preload = function() {
 
     // this.load.spritesheet('bicycle', 'assets/bicycle.png', 120, 76);
     // this.load.spritesheet('F16', 'assets/F16.png', 50, 30);
-    this.load.spritesheet('F16', 'assets/F162.png', 25, 15);
+    // this.load.spritesheet('F16', 'assets/F162.png', 25, 15);
+    this.load.spritesheet('F16', 'assets/F1621.png', 25, 15);
     this.load.spritesheet('aircraf_land', 'assets/aircraft_land.png', 140, 115);
     this.load.spritesheet('bicycle_no_wheel', 'assets/bicycle_no_wheel.png', 60, 38);
     this.load.spritesheet('bicycle_wheel', 'assets/bicycle_wheel.png', 23, 23);
@@ -129,7 +130,10 @@ PracticeGame.SurveyStateLearn2Div.prototype.create = function() {
 
 
     this.aircraftLandGroup = this.add.group()
-    this.aircraftGroup = this.add.group()
+    
+    this.aircraftGroup = this.game.add.group()
+    this.game.physics.arcade.enable(this.aircraftGroup);
+    this.aircraftGroup.enableBody = true
 
 
 
@@ -345,8 +349,15 @@ PracticeGame.SurveyStateLearn2Div.prototype.utils = {
               }
                   
               var child =aircraftGroup.children[aircraftLandedCount] 
-              child.position.x = item.position.x +  columnNum * columnWidth
-              child.position.y = item.position.y + rowNum * rowHeight  + rowHeight /2 - columnNum * rowOffset
+            //   child.position.x = item.position.x +  columnNum * columnWidth
+            //   child.position.y = item.position.y + rowNum * rowHeight  + rowHeight /2 - columnNum * rowOffset
+            var tween =   game.add.tween(child).to({x:item.position.x +  columnNum * columnWidth,y:item.position.y + rowNum * rowHeight  + rowHeight /2 - columnNum * rowOffset},1000)
+            //  var tween =  game.add.tween(child).to({x:10,y:400},1000)
+               tween.start(); 
+              
+              
+              
+              
               columnNum++
               aircraftLandedCount++
           }
