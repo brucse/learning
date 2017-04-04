@@ -39,6 +39,7 @@ PracticeGame.ShootingState.prototype.init = function(round, newSurvey, newGame, 
     this.round = round
     if (newSurvey && !newGame) {
         this.surveyCount++
+        this.robberLastPositionX = this.world.width / 2
     }
 
     if (newGame) {
@@ -124,7 +125,8 @@ PracticeGame.ShootingState.prototype.create = function() {
     this.robber.body.collideWorldBounds = true;
     // this.robber.body.onWorldBounds = new Phaser.Signal();
     this.robber.body.bounce.x = 1
-    this.robber.body.velocity.x = this.robberVelocity
+    var rnd = (this.game.rnd.pick([-1, 1]))
+    this.robber.body.velocity.x = this.robberVelocity * rnd
     this.robber.body.immovable = true
     if(this.robberLastPositionX != null){
         this.robber.position.x = this.robberLastPositionX
