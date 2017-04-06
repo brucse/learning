@@ -3,8 +3,13 @@ bugs:
 	- aircraft counting wrong in case of 100	
 		
 features:
-
+    
+    - szorzasnal - osztasnal le kelljen irni a szamokat es a muveleti jelet (hangosan mondas helyettesitese)
+    - bulletek tunjenek el talalatkor
     - a biciklikerekek mozogva menjenek a szamolasi helyukre
 	- size the screen better
+	- help ne legyen mindig a kepernyon
+	- rablo repulon
+	- rendor repulorol bombaz rablo
 	
 	

@@ -39,13 +39,40 @@ PracticeGame.SurveyStateLearn2X = function(game) {
         10: "szer"
     }
 
+    this.multiplierArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    this.multiplierArrayShuffled
+    this.isArraySet = false
+
 };
 
 PracticeGame.SurveyStateLearn2X.prototype = Object.create(PracticeGameBaseState.prototype)
 
 
-PracticeGame.SurveyStateLearn2X.prototype.init = function(surveyCount,surveyType) {
-    this.multiplier = surveyCount
+PracticeGame.SurveyStateLearn2X.prototype.init = function(surveyCount, surveyType) {
+
+    if (surveyType == 'mult2part1rnd') {
+        if (!this.isArraySet) {
+            this.multiplierArrayShuffled = _.shuffle([1, 2, 3, 4, 5])
+            this.isArraySet = true
+        }
+    }
+    else if (surveyType == 'mult2part1') {
+        this.multiplierArrayShuffled = [1, 2, 3, 4, 5]
+        this.isArraySet = true
+    }
+    else if (surveyType == 'mult2part2rnd') {
+        if (!this.isArraySet) {
+            this.multiplierArrayShuffled = _.shuffle([6,7,8,9,10])
+            this.isArraySet = true
+        }
+    }
+    else if (surveyType == 'mult2part2') {
+        this.multiplierArrayShuffled = [6,7,8,9,10]
+        this.isArraySet = true
+    }
+
+
+    this.multiplier = this.multiplierArrayShuffled[surveyCount - 1]
     this.answer = ""
     this.bicycleCount = 0
     this.countedClick = 0
@@ -151,7 +178,7 @@ PracticeGame.SurveyStateLearn2X.prototype.utils = {
             bicycle.inputEnabled = true;
 
             var bicycleNoWheel = this.bicycleNoWheelGroup.create(this.bicycleCount * 68, 150, 'bicycle_no_wheel')
-            bicycleNoWheel.visible = true 
+            bicycleNoWheel.visible = true
 
             this.bicycleCount++
         }
@@ -162,7 +189,7 @@ PracticeGame.SurveyStateLearn2X.prototype.utils = {
             this.instructionText.setText("Ha segítség kell a számoláshoz, kattints a biciklikre.")
             this.magicianButton.destroy()
             this.helpButton.destroy()
-            // this.readyButton.destroy()
+                // this.readyButton.destroy()
                 // this.computeButton.visible = true
         }
     },
@@ -244,9 +271,10 @@ PracticeGame.SurveyStateLearn2X.prototype.utils = {
 
             this.add.button(700, 10, 'backtogame_button', function() {
                 //@todo this.multiplier separate to round counting 
-                this.game.state.start('ShootingState', true, false, 1, true,false,this.surveyType);
+                this.game.state.start('ShootingState', true, false, 1, true, false, this.surveyType);
             }, this, 0, 0, 0, 1);
-        }else{
+        }
+        else {
             this.questionText.fill = "red"
             this.instructionText.setText("Ez nem a helyes eredmény, próbáld újra")
         }

@@ -19,21 +19,21 @@ PracticeGame.ShootingState.prototype = Object.create(PracticeGameBaseState.proto
 PracticeGame.ShootingState.prototype.init = function(round, newSurvey, newGame, surveyType) {
     this.surveyType = surveyType
     var surveyCountMax
-    if (this.surveyType == 'mult2part1') {
+    if (this.surveyType == 'mult2part1' || this.surveyType == 'mult2part1rnd') {
         surveyCountMax = 5
-    }else if(this.surveyType == 'mult2part2'){
-        surveyCountMax = 10
+    }else if(this.surveyType == 'mult2part2' || this.surveyType == 'mult2part2rnd'){
+        surveyCountMax = 5 
     }
     else if (this.surveyType == 'div2part1') {
         surveyCountMax = 5
     }
     else if (this.surveyType == 'div2part2') {
-        surveyCountMax = 10
+        surveyCountMax =  5
     }
 
 
     this.shotCounter = 0
-    if (this.surveyCount > surveyCountMax) {
+    if (this.surveyCount >= surveyCountMax) {
         this.game.state.start('GrandFinaleState', true, false, this.surveyType);
     }
     this.round = round
@@ -43,16 +43,16 @@ PracticeGame.ShootingState.prototype.init = function(round, newSurvey, newGame, 
     }
 
     if (newGame) {
-        if (this.surveyType == 'mult2part1') {
+        if (this.surveyType == 'mult2part1' || this.surveyType == 'mult2part1rnd') {
             this.surveyCount = 1
-        }else if(this.surveyType == 'mult2part2'){
-            this.surveyCount = 6
+        }else if(this.surveyType == 'mult2part2' || this.surveyType == 'mult2part2rnd'){
+            this.surveyCount = 1
         }
         else if (this.surveyType == 'div2part1') {
             this.surveyCount = 1
         }
         else if (this.surveyType == 'div2part2') {
-            this.surveyCount = 6
+            this.surveyCount = 1
         }
         // this.surveyCount = 1
     }
@@ -93,7 +93,9 @@ PracticeGame.ShootingState.prototype.create = function() {
 
     // this.bullet.angle = 90
 
-    this.policeman = this.add.sprite(this.world.width / 2, this.world.height - 72 * this.round, 'policeman')
+    this.policeman = this.add.sprite(this.world.width / 2, this.world.height - 72 * this.round , 'policeman')
+    //comment it jump over shooting
+    // this.policeman = this.add.sprite(this.world.width / 2, this.world.height - 350 , 'policeman')
 
     this.game.physics.arcade.enable(this.policeman);
     this.policeman.enableBody = true
@@ -195,7 +197,7 @@ PracticeGame.ShootingState.prototype.update = function() {
     this.game.physics.arcade.collide(this.weapon.bullets, this.robber, this.detectBullet, null, this);
     this.game.physics.arcade.collide(this.robber, this.policeman, function() {
         // this.surveyCount++ 
-        if (this.surveyType == 'mult2part1' || this.surveyType == 'mult2part2') {
+        if (this.surveyType == 'mult2part1' || this.surveyType == 'mult2part2' || this.surveyType == 'mult2part1rnd' || this.surveyType == 'mult2part2rnd') {
             this.game.state.start('SurveyStateLearn2X', true, false, this.surveyCount, this.surveyType);
         }
         else if (this.surveyType == 'div2part1' || this.surveyType == 'div2part2') {
