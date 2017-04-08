@@ -9,7 +9,7 @@ PracticeGame.GrandFinaleState = function(game) {
     this.surveyCount = 1
     this.prisonCell
     this.newgameButton
-    this.surveyType
+    // this.surveyType
 
 };
 
@@ -36,8 +36,9 @@ PracticeGame.GrandFinaleState.prototype.preload = function() {
 }
 
 
-PracticeGame.GrandFinaleState.prototype.init = function(surveyType) {
-    this.surveyType = surveyType
+// PracticeGame.GrandFinaleState.prototype.init = function(surveyType) {
+PracticeGame.GrandFinaleState.prototype.init = function() {
+    // this.surveyType = surveyType
 }
 PracticeGame.GrandFinaleState.prototype.create = function() {
 

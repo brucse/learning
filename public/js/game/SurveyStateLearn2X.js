@@ -2,9 +2,13 @@ PracticeGame.SurveyStateLearn2X = function(game) {
     // this.carStockCount = 11
     // this.parking_lot
     // this.carList = []
-    // this.carCount = 4
+ this.wrongBicylceCountText    // this.carCount = 4
+ 
+ 
     this.instructionText
-    this.questionText
+        // this.questionText
+    this.actualQuestionTextIndex
+    this.questionTextArray = []
     this.magicianButton
     this.bicycleGroup
     this.bicycleNoWheelGroup
@@ -24,7 +28,7 @@ PracticeGame.SurveyStateLearn2X = function(game) {
     this.columnCounter = 0
     this.rowCounter = 0
     this.wheelCounter = 0
-    this.surveyType
+        // this.surveyType
 
     this.affixMatrix = {
         1: "szer",
@@ -39,7 +43,7 @@ PracticeGame.SurveyStateLearn2X = function(game) {
         10: "szer"
     }
 
-    this.multiplierArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+    // this.multiplierArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     this.multiplierArrayShuffled
     this.isArraySet = false
 
@@ -48,26 +52,29 @@ PracticeGame.SurveyStateLearn2X = function(game) {
 PracticeGame.SurveyStateLearn2X.prototype = Object.create(PracticeGameBaseState.prototype)
 
 
-PracticeGame.SurveyStateLearn2X.prototype.init = function(surveyCount, surveyType) {
 
-    if (surveyType == 'mult2part1rnd') {
+
+// PracticeGame.SurveyStateLearn2X.prototype.init = function(surveyCount, surveyType) {
+PracticeGame.SurveyStateLearn2X.prototype.init = function(surveyCount) {
+
+    if (this.surveyType == 'mult2part1rnd') {
         if (!this.isArraySet) {
             this.multiplierArrayShuffled = _.shuffle([1, 2, 3, 4, 5])
             this.isArraySet = true
         }
     }
-    else if (surveyType == 'mult2part1') {
+    else if (this.surveyType == 'mult2part1') {
         this.multiplierArrayShuffled = [1, 2, 3, 4, 5]
         this.isArraySet = true
     }
-    else if (surveyType == 'mult2part2rnd') {
+    else if (this.surveyType == 'mult2part2rnd') {
         if (!this.isArraySet) {
-            this.multiplierArrayShuffled = _.shuffle([6,7,8,9,10])
+            this.multiplierArrayShuffled = _.shuffle([6, 7, 8, 9, 10])
             this.isArraySet = true
         }
     }
-    else if (surveyType == 'mult2part2') {
-        this.multiplierArrayShuffled = [6,7,8,9,10]
+    else if (this.surveyType == 'mult2part2') {
+        this.multiplierArrayShuffled = [6, 7, 8, 9, 10]
         this.isArraySet = true
     }
 
@@ -79,7 +86,9 @@ PracticeGame.SurveyStateLearn2X.prototype.init = function(surveyCount, surveyTyp
     this.columnCounter = 0
     this.rowCounter = 0
     this.wheelCounter = 0
-    this.surveyType = surveyType
+    this.questionTextArray = []
+        // this.surveyType = surveyType
+        // this.game.paused = false
 }
 
 PracticeGame.SurveyStateLearn2X.prototype.preload = function() {
@@ -117,16 +126,36 @@ PracticeGame.SurveyStateLearn2X.prototype.create = function() {
 
     // this.instructionText.anchor.setTo(0.5, 0);
 
-    this.questionText = this.game.add.text(this.world.width / 2, 110, this.multiplier.toString() + " * " + this.multiplicand.toString() + " = ", {
-        font: "30px Arial",
-        fill: "yellow",
-        align: "center"
-    });
-    this.questionText.anchor.setTo(0.5, 0);
+    var questionTextHeight = 35
+
+    for (var i = 0; i < this.multiplierArrayShuffled.length; i++) {
+        var text
+        text = this.game.add.text(this.world.width / 2, 110 + i * questionTextHeight, this.multiplierArrayShuffled[i].toString() + " * " + this.multiplicand.toString() + " = ", {
+            font: "30px Arial",
+            fill: "yellow",
+            align: "center"
+                // backgroundColor : 'yellow'
+        });
+
+        text.anchor.setTo(0.5, 0);
+        this.questionTextArray.push(text)
+
+        // text.backgroundColor = 'yellow'
+    }
+    this.actualQuestionTextIndex = 0
+    this.questionTextArray[this.actualQuestionTextIndex].setStyle({
+            backgroundColor: "gray"
+        })
+        // this.questionText = this.game.add.text(this.world.width / 2, 110, this.multiplier.toString() + " * " + this.multiplicand.toString() + " = ", {
+        //     font: "30px Arial",
+        //     fill: "yellow",
+        //     align: "center"
+        // });
+        // this.questionText.anchor.setTo(0.5, 0);
 
     this.physics.startSystem(Phaser.Physics.ARCADE);
 
-    this.readyButtn = this.add.button(700, 10, 'ready_button', this.utils.readyButtonClick, this, 0, 0, 0, 1);
+    this.readyButton = this.add.button(700, 10, 'ready_button', this.utils.readyButtonClick, this, 0, 0, 0, 1);
     // this.computeButton = this.add.button(halfLine + 50,110, 'help_button',this.utils.helpButtonClick,this,0,0,1,0);
     this.helpButton = this.add.button(700, 60, 'help_button', this.utils.helpButtonClick, this, 0, 0, 1, 0);
 
@@ -150,6 +179,8 @@ PracticeGame.SurveyStateLearn2X.prototype.create = function() {
         // this.bicycleNoWheelGroup.scale.setTo(0.5,0.5)
     this.bicycleWheelGroup = this.add.group()
         // this.bicycleWheelGroup.scale.setTo(0.5,0.5)
+    this.wheelGroup
+
     this.helpCountingTextGroup = this.add.group()
     this.helpCountingTextGroupSetting = {
         font: "25px Arial",
@@ -166,18 +197,21 @@ PracticeGame.SurveyStateLearn2X.prototype.utils = {
 
 
     clickOnMagician: function() {
-        if (this.bicycleCount < this.multiplier) {
+        // if (this.bicycleCount < this.multiplierArrayShuffled[this.actualQuestionTextIndex]) {
+            this.instructionText.setText("Ha segítség kell a számoláshoz, kattints a biciklikre.")
+            this.helpButton.visible = false
+        if (this.bicycleCount < 10) {
             // var bicycleLineNum = 0
             // var computerImageXCount = 0
             // if(this.bicycleCount >= 5){
             // //   bicycleLineNum = 1 
             // //   computerImageXCount = 5 
             // }
-            var bicycle = this.bicycleGroup.create(this.bicycleCount * 68, 150, 'bicycle')
+            var bicycle = this.bicycleGroup.create(this.bicycleCount * 68, 290, 'bicycle')
             bicycle.events.onInputDown.add(this.utils.clickOnBicycle, this);
             bicycle.inputEnabled = true;
 
-            var bicycleNoWheel = this.bicycleNoWheelGroup.create(this.bicycleCount * 68, 150, 'bicycle_no_wheel')
+            var bicycleNoWheel = this.bicycleNoWheelGroup.create(this.bicycleCount * 68, 290, 'bicycle_no_wheel')
             bicycleNoWheel.visible = true
 
             this.bicycleCount++
@@ -185,10 +219,8 @@ PracticeGame.SurveyStateLearn2X.prototype.utils = {
 
 
 
-        if (this.bicycleCount == this.multiplier) {
-            this.instructionText.setText("Ha segítség kell a számoláshoz, kattints a biciklikre.")
-            this.magicianButton.destroy()
-            this.helpButton.destroy()
+        if (this.bicycleCount == this.multiplierArrayShuffled[this.actualQuestionTextIndex]) {
+                // this.magicianButton.destroy()
                 // this.readyButton.destroy()
                 // this.computeButton.visible = true
         }
@@ -199,91 +231,213 @@ PracticeGame.SurveyStateLearn2X.prototype.utils = {
     // },
 
     helpButtonClick: function() {
-        this.questionText.fill = "yellow"
+        // this.questionText.fill = "yellow"
+        this.helpButton.visible = false
         this.magicianButton.visible = true
         this.instructionText.setText("Kattints " + this.multiplier.toString() + "-" + this.affixMatrix[this.multiplier] + " a bűvész cilinderére és kapsz " + this.multiplier.toString() + " biciklit.\n Ha megszámolod a kerekeket, megkapod az eredményt.")
-        this.helpButton.destroy()
-
     },
 
     clickOnBicycle: function(source) {
         console.log('cob' + source)
-        source.inputEnabled = false
-            //compute grid with 10 rows and 10 columns
-        var rowHeight = 34 + 5
-        var columnWidth = 68
-            //top left corner of the grid
-        var gridTopLeftCornerX = 15
-        var gridTopLeftCornerY = 150 + rowHeight + 20
-        var bottomBorder = 5
-        var counterTextLeftCornerX = 681
-        source.visible = false
-        var index = _.indexOf(this.bicycleGroup.children, source)
-        this.bicycleNoWheelGroup.children[index].visible = true
+        if (this.bicycleCount !=  this.multiplierArrayShuffled[this.actualQuestionTextIndex]) {
+            this.wrongBicylceCountText = this.game.add.text(10, source.position.y, "Nem ennyi biciklire van szukseged, \nnezd meg mennyivel kell szorozni a " + this.multiplicand + "-t")
+            while (this.bicycleGroup.length > 0) {
+                this.bicycleGroup.children.pop().destroy()
+            }
+
+            while (this.bicycleNoWheelGroup.length > 0) {
+                this.bicycleNoWheelGroup.children.pop().destroy()
+            }
+            this.magicianButton.visible = false
+        }
+        else {
+
+            source.inputEnabled = false
+                //compute grid with 10 rows and 10 columns
+            var rowHeight = 34 + 5
+            var columnWidth = 68
+                //top left corner of the grid
+            var gridTopLeftCornerX = 15
+            var gridTopLeftCornerY = 360 + rowHeight + 20
+            var bottomBorder = 5
+            var counterTextLeftCornerX = 681
+            source.visible = false
+            var index = _.indexOf(this.bicycleGroup.children, source)
+            this.bicycleNoWheelGroup.children[index].visible = true
 
 
 
-        this.countedClick++
-            var i = this.countedClick
+            this.countedClick++
+                var i = this.countedClick
 
-        // for (var i = 1; i <= this.bicycleCount * this.multiplicand;) {
-        // for (var i = 1; i <= this.multiplicand; i++) {
-        for (var i = 1; i <= this.multiplicand; i++) {
-            var rowY = gridTopLeftCornerY + this.rowCounter * rowHeight
-            var bicycleWheel = this.bicycleWheelGroup.create(gridTopLeftCornerX + this.columnCounter * columnWidth, rowY, 'bicycle_wheel')
-            this.columnCounter++
-                this.wheelCounter++
-                if (this.wheelCounter == 10 || this.wheelCounter == 20 || this.wheelCounter == 30 || this.wheelCounter == 40 || this.wheelCounter == 50 || this.wheelCounter == 60 ||
-                    this.wheelCounter == 70 || this.wheelCounter == 80 || this.wheelCounter == 90) {
-                    var counterText = this.game.add.text(counterTextLeftCornerX, rowY, (this.wheelCounter / 10 * this.columnCounter).toString(), this.helpCountingTextGroupSetting)
-                    this.rowCounter++
-                        this.columnCounter = 0
+            // for (var i = 1; i <= this.bicycleCount * this.multiplicand;) {
+            // for (var i = 1; i <= this.multiplicand; i++) {
+            var counterText
+            for (var i = 1; i <= this.multiplicand; i++) {
+                var rowY = gridTopLeftCornerY + this.rowCounter * rowHeight
+                var bicycleWheel = this.bicycleWheelGroup.create(gridTopLeftCornerX + this.columnCounter * columnWidth, rowY, 'bicycle_wheel')
+                this.columnCounter++
+                    this.wheelCounter++
+                    if (this.wheelCounter == 10 || this.wheelCounter == 20 || this.wheelCounter == 30 || this.wheelCounter == 40 || this.wheelCounter == 50 || this.wheelCounter == 60 ||
+                        this.wheelCounter == 70 || this.wheelCounter == 80 || this.wheelCounter == 90) {
+                        counterText = this.game.add.text(counterTextLeftCornerX, rowY, (this.wheelCounter / 10 * this.columnCounter).toString(), this.helpCountingTextGroupSetting, this.helpCountingTextGroup)
+                        this.rowCounter++
+                            this.columnCounter = 0
+                    }
+                    // else
+                if (this.bicycleCount * this.multiplicand == this.wheelCounter) {
+                    // var counterText = this.game.add.text(counterTextLeftCornerX, rowY, this.columnCounter.toString(), this.helpCountingTextGroupSetting,this.helpCountingTextGroup)
+                    if (counterText != null) counterText.destroy()
+                    this.instructionText.width = 680
+                    this.instructionText.font = "15px Arial"
+                    this.instructionText.setText("Most már könnyű megszámolni. \n Írd be az eredményt, \n azután nyomd meg a \"Kész\" gombot!")
+
                 }
-                else
-            if (this.bicycleCount * this.multiplicand == this.wheelCounter) {
-                var counterText = this.game.add.text(counterTextLeftCornerX, rowY, this.columnCounter.toString(), this.helpCountingTextGroupSetting)
-                this.instructionText.width = 680
-                this.instructionText.font = "15px Arial"
-                this.instructionText.setText("Most már könnyű megszámolni. \n Írd be az eredményt, \n azután nyomd meg a \"Kész\" gombot!")
 
             }
 
         }
 
-
-        this.readyButton = this.add.button(700, 10, 'ready_button', this.utils.readyButtonClick, this, 0, 0, 0, 1);
+        // this.readyButton = this.add.button(700, 10, 'ready_button', this.utils.readyButtonClick, this, 0, 0, 0, 1);
 
     },
 
     keyPress: function(char) {
-        this.questionText.fill = "yellow"
+        // this.questionText.fill = "yellow"
         this.answer = this.answer + char
-        console.log(this.answer)
-        this.questionText.setText(this.multiplier.toString() + " * " + this.multiplicand.toString() + " = " + this.answer)
+        var actualText = this.questionTextArray[this.actualQuestionTextIndex].text.split('=')[0]
+        this.questionTextArray[this.actualQuestionTextIndex].setText(actualText + '= ' + this.answer)
+
     },
 
     readyButtonClick: function() {
-        if (this.answer == (this.multiplier * this.multiplicand).toString()) {
-            this.instructionText.setText("Ügyes vagy, ez a helyes válasz!\n Kattints a \"JÁTÉK\" gombra")
-            this.helpButton.destroy()
-            this.clearButton.destroy()
+        this.helpButton.visible = true
+        this.magicianButton.visible = false
+            // this.bicycleNoWheelGroup.destroy()
+            // this.bicycleNoWheelGroup.children.forEach(function(item){
+            //   item.destroy() 
+            // })
+        while (this.bicycleNoWheelGroup.length > 0) {
+            this.bicycleNoWheelGroup.children.pop().destroy()
+        }
+        // this.bicycleGroup.children.forEach(function(item){
+        //   item.destroy() 
+        // })
+        while (this.bicycleGroup.length > 0) {
+            this.bicycleGroup.children.pop().destroy()
+        }
+        // this.bicycleWheelGroup.children.forEach(function(item){
+        //   item.destroy() 
+        // })
+        while (this.bicycleWheelGroup.length > 0) {
+            this.bicycleWheelGroup.children.pop().destroy()
+        }
+        // for(var i = 0; i < l; i++){
+        //   this.bicycleWheelGroup.children[i].destroy() 
+        //   console.log(i)
+        // }
+        // this.helpCountingTextGroup.children.forEach(function(item){
+        //   item.destroy() 
+        // })
+        while (this.helpCountingTextGroup.children.length > 0) {
+            this.helpCountingTextGroup.children.pop().destroy()
+        }
+
+        this.bicycleCount = 0
+        this.columnCounter = 0
+        this.wheelCounter = 0
+
+
+        if (this.actualQuestionTextIndex <= this.multiplierArrayShuffled.length - 1) {
+            // if (this.answer == (this.multiplier * this.multiplicand).toString()) {
+            if (this.answer == (this.multiplicand * this.multiplierArrayShuffled[this.actualQuestionTextIndex]).toString()) {
+                // this.instructionText.setText("Ügyes vagy, ez a helyes válasz!\n Kattints a \"JÁTÉK\" gombra")
+                this.questionTextArray[this.actualQuestionTextIndex].setStyle({
+                    backgroundColor: null
+                })
+                if (this.actualQuestionTextIndex != this.multiplierArrayShuffled.length - 1) {
+                    this.actualQuestionTextIndex++
+                        this.questionTextArray[this.actualQuestionTextIndex].setStyle({
+                            backgroundColor: 'gray'
+                        })
+                }
+                else {
+                    this.instructionText.setText("Ügyes vagy, ez a helyes válasz!\n Kattints a \"JÁTÉK\" gombra")
+                    this.helpButton.destroy()
+                    this.clearButton.destroy()
+                    this.readyButton.destroy()
+                    this.add.button(700, 10, 'backtogame_button', function() {
+                        //@todo this.multiplier separate to round counting 
+                        this.game.state.start('ShootingState', true, false, 1, true, false, this.surveyType);
+                    }, this, 0, 0, 0, 1);
+
+                    //all questions answered well
+
+                }
+                // this.instructionText.setText("Ügyes vagy, ez a helyes válasz!\n Kattints a \"JÁTÉK\" gombra")
+                // this.helpButton.destroy()
+                // this.clearButton.destroy()
                 // this.readyButton.destroy()
 
-            this.add.button(700, 10, 'backtogame_button', function() {
-                //@todo this.multiplier separate to round counting 
-                this.game.state.start('ShootingState', true, false, 1, true, false, this.surveyType);
-            }, this, 0, 0, 0, 1);
+                // this.add.button(700, 10, 'backtogame_button', function() {
+                //     //@todo this.multiplier separate to round counting 
+                //     this.game.state.start('ShootingState', true, false, 1, true, false, this.surveyType);
+                // }, this, 0, 0, 0, 1);
+            }
+            else {
+                // this.questionText.fill = "red"
+                this.questionTextArray[this.actualQuestionTextIndex].setStyle({
+                    fill: 'red'
+                })
+                this.instructionText.setText("Ez nem a helyes eredmény, próbáld újra")
+            }
+
         }
-        else {
-            this.questionText.fill = "red"
-            this.instructionText.setText("Ez nem a helyes eredmény, próbáld újra")
-        }
+
+        this.answer = ''
     },
 
     clearButtonClick: function() {
         this.answer = ""
-        this.questionText.setText(this.multiplier.toString() + " * " + this.multiplicand.toString() + " = " + this.answer)
-        this.questionText.fill = "yellow"
+            // this.questionText.setText(this.multiplier.toString() + " * " + this.multiplicand.toString() + " = " + this.answer)
+            // this.questionText.fill = "yellow"
+        var text = this.multiplierArrayShuffled[this.actualQuestionTextIndex].toString() + " * " + this.multiplicand.toString() + " = "
+        this.questionTextArray[this.actualQuestionTextIndex].setText(text)
+        if(this.wrongBicylceCountText != null) this.wrongBicylceCountText.destroy()
+
+            this.magicianButton.visible = true
+
+
+        while (this.bicycleNoWheelGroup.length > 0) {
+            this.bicycleNoWheelGroup.children.pop().destroy()
+        }
+        // this.bicycleGroup.children.forEach(function(item){
+        //   item.destroy() 
+        // })
+        while (this.bicycleGroup.length > 0) {
+            this.bicycleGroup.children.pop().destroy()
+        }
+        // this.bicycleWheelGroup.children.forEach(function(item){
+        //   item.destroy() 
+        // })
+        while (this.bicycleWheelGroup.length > 0) {
+            this.bicycleWheelGroup.children.pop().destroy()
+        }
+        // for(var i = 0; i < l; i++){
+        //   this.bicycleWheelGroup.children[i].destroy() 
+        //   console.log(i)
+        // }
+        // this.helpCountingTextGroup.children.forEach(function(item){
+        //   item.destroy() 
+        // })
+        while (this.helpCountingTextGroup.children.length > 0) {
+            this.helpCountingTextGroup.children.pop().destroy()
+        }
+
+        this.bicycleCount = 0
+        this.columnCounter = 0
+        this.wheelCounter = 0
+
     }
 
 
@@ -297,8 +451,11 @@ PracticeGame.SurveyStateLearn2X.prototype.render = function() {
     // console.log('render')
     // this.game.debug.text('hoppa' + this.instructionText.text,20,20,'yellow')
     // this.game.debug.body(this.bicycleGroup.children[0],20,20,'yellow')
-    if (this.bicycleGroup.children.length > 1 && this.bicycleGroup.children[1].body != null) {
+    // if (this.bicycleGroup.children.length > 1 && this.bicycleGroup.children[1].body != null) {
 
-        this.game.debug.body(this.bicycleGroup.children[1])
-    }
+    //     this.game.debug.body(this.bicycleGroup.children[1])
+    // }
+
+    // var text = this.questionTextArray[this.actualQuestionTextIndex]
+
 }

@@ -1,14 +1,20 @@
 bugs:
+    - sima szorzas csak 4-ig megy?
     - why should click twice on the uj jatek button?
 	- aircraft counting wrong in case of 100	
+	- osztasnal utolso sor szama rossz
 		
 features:
-    
+    - osztas is legyen random
+    - survey mod - ot ne kelljen init-ben passzolgatni
+    - megszamolasnal az utolso sor ne legyen kiirva 
+    - valami kozos osztalyokat csinalni
     - szorzasnal - osztasnal le kelljen irni a szamokat es a muveleti jelet (hangosan mondas helyettesitese)
     - bulletek tunjenek el talalatkor
     - a biciklikerekek mozogva menjenek a szamolasi helyukre
 	- size the screen better
 	- help ne legyen mindig a kepernyon
+	- rablot rendor mindig bekergeti a sarokba
 	- rablo repulon
 	- rendor repulorol bombaz rablo
 	

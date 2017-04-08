@@ -49,6 +49,8 @@ PracticeGame.SurveyStateLearn2Div = function(game) {
         10: "szer"
     }
 
+    this.multiplierArrayShuffled
+    this.isArraySet = false
 };
 
 PracticeGame.SurveyStateLearn2Div.prototype = Object.create(PracticeGameBaseState.prototype)
@@ -56,7 +58,32 @@ PracticeGame.SurveyStateLearn2Div.prototype = Object.create(PracticeGameBaseStat
 
 PracticeGame.SurveyStateLearn2Div.prototype.init = function(surveyCount,surveyType) {
     // this.multiplier = surveyCount
-    this.dividend = this.divider * surveyCount
+    
+    
+    if (surveyType == 'div2part1rnd') {
+        if (!this.isArraySet) {
+            this.multiplierArrayShuffled = _.shuffle([1, 2, 3, 4, 5])
+            this.isArraySet = true
+        }
+    }
+    else if (surveyType == 'div2part1') {
+        this.multiplierArrayShuffled = [1, 2, 3, 4, 5]
+        this.isArraySet = true
+    }
+    else if (surveyType == 'div2part2rnd') {
+        if (!this.isArraySet) {
+            this.multiplierArrayShuffled = _.shuffle([6,7,8,9,10])
+            this.isArraySet = true
+        }
+    }
+    else if (surveyType == 'div2part2') {
+        this.multiplierArrayShuffled = [6,7,8,9,10]
+        this.isArraySet = true
+    }
+
+
+    // this.multiplier = this.multiplierArrayShuffled[surveyCount - 1]
+    this.dividend = this.divider * this.multiplierArrayShuffled[surveyCount - 1]
     this.answer = ""
     this.bicycleCount = 0
     this.countedClick = 0

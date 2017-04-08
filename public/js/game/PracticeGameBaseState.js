@@ -1,9 +1,12 @@
-var PracticeGameBaseState = function() {}
+var PracticeGameBaseState = function() {
+}
 
 
 PracticeGameBaseState.prototype = Object.create(Phaser.State.prototype);
 //@todo check is it needed
 // PracticeGameBaseState.prototype.constructor = PracticeGameBaseState
+
+PracticeGameBaseState.prototype.surveyType 
 
 
 PracticeGameBaseState.prototype.gameState

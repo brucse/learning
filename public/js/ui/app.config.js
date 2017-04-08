@@ -35,6 +35,7 @@ module('learnG').controller('surveyController', function($scope, $routeParams, $
 			render: render
 		});*/
 
+		PracticeGameBaseState.prototype.surveyType = surveyType
 		var game = new Phaser.Game(800, 600);
 
 		// game.state.add('InitState', PracticeGame.InitState);
@@ -95,8 +96,8 @@ module('learnG').controller('surveyController', function($scope, $routeParams, $
 		// game.state.start('SurveyStateLearn2Div',true,false,1);
 		// game.state.start('GrandFinaleState');
 		
-		
-		game.state.start('ShootingState',true,false,1,true,true,surveyType);
+		// game.state.start('ShootingState',true,false,1,true,true,surveyType);
+		game.state.start('ShootingState',true,false,1,true,true);
 
 	// })
 
