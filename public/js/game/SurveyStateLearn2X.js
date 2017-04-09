@@ -443,6 +443,7 @@ PracticeGame.SurveyStateLearn2X.prototype.utils = {
                 //         this.questionTextArray[this.actualQuestionTextIndex].setStyle(this.onWorkStyle)
                 // }
                 // else {
+                this.questionText.fill = 'yellow'
                 this.instructionText.setText("Ügyes vagy, ez a helyes válasz!\n Kattints a \"JÁTÉK\" gombra")
                 this.helpButton.destroy()
                 this.clearButton.destroy()
