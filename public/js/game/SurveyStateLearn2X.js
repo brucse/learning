@@ -46,11 +46,20 @@ PracticeGame.SurveyStateLearn2X = function(game) {
     // this.multiplierArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     this.multiplierArrayShuffled
     this.isArraySet = false
-    
-    this.onWorkStyle = {fill: 'yellow',backgroundColor : '#5f5f5f'}
-    
-    this.errorStyle = {fill: 'red',backgroundColor : '#5f5f5f'}
-    this.readyStyle = {fill: 'yellow',backgroundColor : null}
+
+    this.onWorkStyle = {
+        fill: 'yellow',
+        backgroundColor: '#5f5f5f'
+    }
+
+    this.errorStyle = {
+        fill: 'red',
+        backgroundColor: '#5f5f5f'
+    }
+    this.readyStyle = {
+        fill: 'yellow',
+        backgroundColor: null
+    }
 
 };
 
@@ -133,28 +142,40 @@ PracticeGame.SurveyStateLearn2X.prototype.create = function() {
 
     var questionTextHeight = 35
 
-    for (var i = 0; i < this.multiplierArrayShuffled.length; i++) {
-        var text
-        text = this.game.add.text(this.world.width / 2, 110 + i * questionTextHeight, this.multiplierArrayShuffled[i].toString() + " * " + this.multiplicand.toString() + " = ", {
+    if (this.surveyType == 'mult2part1' || this.surveyType == 'mult2part2') {
+
+        for (var i = 0; i < this.multiplierArrayShuffled.length; i++) {
+            var text
+            text = this.game.add.text(this.world.width / 2, 110 + i * questionTextHeight, this.multiplierArrayShuffled[i].toString() + " * " + this.multiplicand.toString() + " = ", {
+                font: "30px Arial",
+                fill: "yellow",
+                align: "center"
+                    // backgroundColor : 'yellow'
+            });
+
+            text.anchor.setTo(0.5, 0);
+            this.questionTextArray.push(text)
+
+            // text.backgroundColor = 'yellow'
+        }
+        this.actualQuestionTextIndex = 0
+        this.questionTextArray[this.actualQuestionTextIndex].setStyle(this.onWorkStyle)
+
+    }
+    else {
+        this.questionText = this.game.add.text(this.world.width / 2, 110, this.multiplier.toString() + " * " + this.multiplicand.toString() + " = ", {
             font: "30px Arial",
             fill: "yellow",
             align: "center"
-                // backgroundColor : 'yellow'
         });
-
-        text.anchor.setTo(0.5, 0);
-        this.questionTextArray.push(text)
-
-        // text.backgroundColor = 'yellow'
     }
-    this.actualQuestionTextIndex = 0
-    this.questionTextArray[this.actualQuestionTextIndex].setStyle( this.onWorkStyle )
-        // this.questionText = this.game.add.text(this.world.width / 2, 110, this.multiplier.toString() + " * " + this.multiplicand.toString() + " = ", {
-        //     font: "30px Arial",
-        //     fill: "yellow",
-        //     align: "center"
-        // });
-        // this.questionText.anchor.setTo(0.5, 0);
+
+    // this.questionText = this.game.add.text(this.world.width / 2, 110, this.multiplier.toString() + " * " + this.multiplicand.toString() + " = ", {
+    //     font: "30px Arial",
+    //     fill: "yellow",
+    //     align: "center"
+    // });
+    // this.questionText.anchor.setTo(0.5, 0);
 
     this.physics.startSystem(Phaser.Physics.ARCADE);
 
@@ -242,7 +263,17 @@ PracticeGame.SurveyStateLearn2X.prototype.utils = {
 
     clickOnBicycle: function(source) {
         console.log('cob' + source)
-        if (this.bicycleCount != this.multiplierArrayShuffled[this.actualQuestionTextIndex]) {
+        this.magicianButton.visible = false
+        var localMultiplier
+        if (this.surveyType == 'mult2part1' || this.surveyType == 'mult2part2') {
+            localMultiplier = this.multiplierArrayShuffled[this.actualQuestionTextIndex]
+        }
+        else {
+            localMultiplier = this.multiplier
+        }
+
+
+        if (this.bicycleCount != localMultiplier) {
             this.wrongBicylceCountText = this.game.add.text(10, source.position.y + 30, "Nem ennyi biciklire van szükseged, \nnézd meg mennyivel kell szorozni a " + this.multiplicand + "-t")
             this.wrongBicylceCountText.fill = 'red'
             while (this.bicycleGroup.length > 0) {
@@ -309,9 +340,14 @@ PracticeGame.SurveyStateLearn2X.prototype.utils = {
     keyPress: function(char) {
         // this.questionText.fill = "yellow"
         this.answer = this.answer + char
-        var actualText = this.questionTextArray[this.actualQuestionTextIndex].text.split('=')[0]
-        this.questionTextArray[this.actualQuestionTextIndex].setText(actualText + '= ' + this.answer)
-
+        if (this.surveyType == 'mult2part1' || this.surveyType == 'mult2part2') {
+            var actualText = this.questionTextArray[this.actualQuestionTextIndex].text.split('=')[0]
+            this.questionTextArray[this.actualQuestionTextIndex].setText(actualText + '= ' + this.answer)
+        }
+        else {
+            var actualText = this.questionText.text.split('=')[0]
+            this.questionText.setText(actualText + '= ' + this.answer)
+        }
     },
 
     readyButtonClick: function() {
@@ -353,28 +389,72 @@ PracticeGame.SurveyStateLearn2X.prototype.utils = {
         this.wheelCounter = 0
 
 
-        if (this.actualQuestionTextIndex <= this.multiplierArrayShuffled.length - 1) {
-            // if (this.answer == (this.multiplier * this.multiplicand).toString()) {
-            if (this.answer == (this.multiplicand * this.multiplierArrayShuffled[this.actualQuestionTextIndex]).toString()) {
-                // this.instructionText.setText("Ügyes vagy, ez a helyes válasz!\n Kattints a \"JÁTÉK\" gombra")
-                this.questionTextArray[this.actualQuestionTextIndex].setStyle(this.readyStyle )
-                if (this.actualQuestionTextIndex != this.multiplierArrayShuffled.length - 1) {
-                    this.actualQuestionTextIndex++
-                        this.questionTextArray[this.actualQuestionTextIndex].setStyle(this.onWorkStyle)
+        if (this.surveyType == 'mult2part1' || this.surveyType == 'mult2part2') {
+            if (this.actualQuestionTextIndex <= this.multiplierArrayShuffled.length - 1) {
+                // if (this.answer == (this.multiplier * this.multiplicand).toString()) {
+                if (this.answer == (this.multiplicand * this.multiplierArrayShuffled[this.actualQuestionTextIndex]).toString()) {
+                    // this.instructionText.setText("Ügyes vagy, ez a helyes válasz!\n Kattints a \"JÁTÉK\" gombra")
+                    this.questionTextArray[this.actualQuestionTextIndex].setStyle(this.readyStyle)
+                    if (this.actualQuestionTextIndex != this.multiplierArrayShuffled.length - 1) {
+                        this.actualQuestionTextIndex++
+                            this.questionTextArray[this.actualQuestionTextIndex].setStyle(this.onWorkStyle)
+                    }
+                    else {
+                        this.instructionText.setText("Ügyes vagy, ez a helyes válasz!\n Kattints a \"JÁTÉK\" gombra")
+                        this.helpButton.destroy()
+                        this.clearButton.destroy()
+                        this.readyButton.destroy()
+                        this.add.button(700, 10, 'backtogame_button', function() {
+                            //@todo this.multiplier separate to round counting 
+                            this.game.state.start('ShootingState', true, false, 1, true, false, this.surveyType);
+                        }, this, 0, 0, 0, 1);
+
+                        //all questions answered well
+
+                    }
+                    // this.instructionText.setText("Ügyes vagy, ez a helyes válasz!\n Kattints a \"JÁTÉK\" gombra")
+                    // this.helpButton.destroy()
+                    // this.clearButton.destroy()
+                    // this.readyButton.destroy()
+
+                    // this.add.button(700, 10, 'backtogame_button', function() {
+                    //     //@todo this.multiplier separate to round counting 
+                    //     this.game.state.start('ShootingState', true, false, 1, true, false, this.surveyType);
+                    // }, this, 0, 0, 0, 1);
                 }
                 else {
-                    this.instructionText.setText("Ügyes vagy, ez a helyes válasz!\n Kattints a \"JÁTÉK\" gombra")
-                    this.helpButton.destroy()
-                    this.clearButton.destroy()
-                    this.readyButton.destroy()
-                    this.add.button(700, 10, 'backtogame_button', function() {
-                        //@todo this.multiplier separate to round counting 
-                        this.game.state.start('ShootingState', true, false, 1, true, false, this.surveyType);
-                    }, this, 0, 0, 0, 1);
-
-                    //all questions answered well
-
+                    // this.questionText.fill = "red"
+                    this.questionTextArray[this.actualQuestionTextIndex].setStyle(this.errorStyle)
+                    this.instructionText.setText("Ez nem a helyes eredmény, próbáld újra")
                 }
+
+            }
+
+
+        }
+        else {
+            // if (this.actualQuestionTextIndex <= this.multiplierArrayShuffled.length - 1) {
+            if (this.answer == (this.multiplier * this.multiplicand).toString()) {
+                // if (this.answer == (this.multiplicand * this.multiplierArrayShuffled[this.actualQuestionTextIndex]).toString()) {
+                // this.instructionText.setText("Ügyes vagy, ez a helyes válasz!\n Kattints a \"JÁTÉK\" gombra")
+                // this.questionTextArray[this.actualQuestionTextIndex].setStyle(this.readyStyle)
+                // if (this.actualQuestionTextIndex != this.multiplierArrayShuffled.length - 1) {
+                //     this.actualQuestionTextIndex++
+                //         this.questionTextArray[this.actualQuestionTextIndex].setStyle(this.onWorkStyle)
+                // }
+                // else {
+                this.instructionText.setText("Ügyes vagy, ez a helyes válasz!\n Kattints a \"JÁTÉK\" gombra")
+                this.helpButton.destroy()
+                this.clearButton.destroy()
+                this.readyButton.destroy()
+                this.add.button(700, 10, 'backtogame_button', function() {
+                    //@todo this.multiplier separate to round counting 
+                    this.game.state.start('ShootingState', true, false, 1, true, false, this.surveyType);
+                }, this, 0, 0, 0, 1);
+
+                //all questions answered well
+
+                // }
                 // this.instructionText.setText("Ügyes vagy, ez a helyes válasz!\n Kattints a \"JÁTÉK\" gombra")
                 // this.helpButton.destroy()
                 // this.clearButton.destroy()
@@ -386,54 +466,65 @@ PracticeGame.SurveyStateLearn2X.prototype.utils = {
                 // }, this, 0, 0, 0, 1);
             }
             else {
-                // this.questionText.fill = "red"
-                this.questionTextArray[this.actualQuestionTextIndex].setStyle(this.errorStyle)
-                this.instructionText.setText("Ez nem a helyes eredmény, próbáld újra")
+                this.questionText.fill = "red"
+                    // this.questionTextArray[this.actualQuestionTextIndex].setStyle(this.errorStyle)
+                    // this.instructionText.setText("Ez nem a helyes eredmény, próbáld újra")
             }
 
-        }
+            // }
 
+        }
         this.answer = ''
     },
 
     clearButtonClick: function() {
         this.answer = ""
-            // this.questionText.setText(this.multiplier.toString() + " * " + this.multiplicand.toString() + " = " + this.answer)
-            // this.questionText.fill = "yellow"
-        var text = this.multiplierArrayShuffled[this.actualQuestionTextIndex].toString() + " * " + this.multiplicand.toString() + " = "
-        this.questionTextArray[this.actualQuestionTextIndex].setText(text)
-        if (this.wrongBicylceCountText != null) {
-            this.wrongBicylceCountText.destroy()
 
-            this.magicianButton.visible = true
-        }
+        if (this.surveyType == 'mult2part1' || this.surveyType == 'mult2part2') {
+            var text = this.multiplierArrayShuffled[this.actualQuestionTextIndex].toString() + " * " + this.multiplicand.toString() + " = "
+            this.questionTextArray[this.actualQuestionTextIndex].setText(text)
+            if (this.wrongBicylceCountText != null) {
+                this.wrongBicylceCountText.destroy()
 
-        while (this.bicycleNoWheelGroup.length > 0) {
-            this.bicycleNoWheelGroup.children.pop().destroy()
-        }
-        // this.bicycleGroup.children.forEach(function(item){
-        //   item.destroy() 
-        // })
-        while (this.bicycleGroup.length > 0) {
-            this.bicycleGroup.children.pop().destroy()
-        }
-        // this.bicycleWheelGroup.children.forEach(function(item){
-        //   item.destroy() 
-        // })
-        while (this.bicycleWheelGroup.length > 0) {
-            this.bicycleWheelGroup.children.pop().destroy()
-        }
-        // for(var i = 0; i < l; i++){
-        //   this.bicycleWheelGroup.children[i].destroy() 
-        //   console.log(i)
-        // }
-        // this.helpCountingTextGroup.children.forEach(function(item){
-        //   item.destroy() 
-        // })
-        while (this.helpCountingTextGroup.children.length > 0) {
-            this.helpCountingTextGroup.children.pop().destroy()
-        }
+                this.magicianButton.visible = true
+            }
 
+            while (this.bicycleNoWheelGroup.length > 0) {
+                this.bicycleNoWheelGroup.children.pop().destroy()
+            }
+            // this.bicycleGroup.children.forEach(function(item){
+            //   item.destroy() 
+            // })
+            while (this.bicycleGroup.length > 0) {
+                this.bicycleGroup.children.pop().destroy()
+            }
+            // this.bicycleWheelGroup.children.forEach(function(item){
+            //   item.destroy() 
+            // })
+            while (this.bicycleWheelGroup.length > 0) {
+                this.bicycleWheelGroup.children.pop().destroy()
+            }
+            // for(var i = 0; i < l; i++){
+            //   this.bicycleWheelGroup.children[i].destroy() 
+            //   console.log(i)
+            // }
+            // this.helpCountingTextGroup.children.forEach(function(item){
+            //   item.destroy() 
+            // })
+            while (this.helpCountingTextGroup.children.length > 0) {
+                this.helpCountingTextGroup.children.pop().destroy()
+            }
+        }
+        else {
+            this.questionText.setText(this.multiplier.toString() + " * " + this.multiplicand.toString() + " = " + this.answer)
+            this.questionText.fill = "yellow"
+            if (this.wrongBicylceCountText != null) {
+                this.wrongBicylceCountText.destroy()
+
+                this.magicianButton.visible = true
+            }
+
+        }
         this.bicycleCount = 0
         this.columnCounter = 0
         this.wheelCounter = 0

@@ -96,7 +96,8 @@ PracticeGame.ShootingState.prototype.create = function() {
 
     // this.bullet.angle = 90
 
-    this.policeman = this.add.sprite(this.world.width / 2, this.world.height - 72 * this.round , 'policeman')
+    // this.policeman = this.add.sprite(this.world.width / 2, this.world.height - 72 * this.round , 'policeman')
+    this.policeman = this.add.sprite(this.world.width / 2, this.world.height - 58 * this.round , 'policeman')
     //comment it jump over shooting
     // this.policeman = this.add.sprite(this.world.width / 2, this.world.height - 350 , 'policeman')
 
@@ -124,7 +125,8 @@ PracticeGame.ShootingState.prototype.create = function() {
     //  But the 'true' argument tells the weapon to track sprite rotation
     this.weapon.trackSprite(this.policeman, 27, 3, false);
 
-    this.robber = this.add.sprite(this.world.width / 2, this.world.height - 350, 'robber')
+    // this.robber = this.add.sprite(this.world.width / 2, this.world.height - 350, 'robber')
+    this.robber = this.add.sprite(this.world.width / 2, this.world.height - 340, 'robber')
     this.game.physics.arcade.enable(this.robber);
     this.robber.enableBody = true
     this.robber.body.collideWorldBounds = true;
