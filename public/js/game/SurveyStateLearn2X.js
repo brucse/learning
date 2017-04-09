@@ -2,9 +2,9 @@ PracticeGame.SurveyStateLearn2X = function(game) {
     // this.carStockCount = 11
     // this.parking_lot
     // this.carList = []
- this.wrongBicylceCountText    // this.carCount = 4
- 
- 
+    this.wrongBicylceCountText // this.carCount = 4
+
+
     this.instructionText
         // this.questionText
     this.actualQuestionTextIndex
@@ -46,6 +46,11 @@ PracticeGame.SurveyStateLearn2X = function(game) {
     // this.multiplierArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
     this.multiplierArrayShuffled
     this.isArraySet = false
+    
+    this.onWorkStyle = {fill: 'yellow',backgroundColor : '#5f5f5f'}
+    
+    this.errorStyle = {fill: 'red',backgroundColor : '#5f5f5f'}
+    this.readyStyle = {fill: 'yellow',backgroundColor : null}
 
 };
 
@@ -143,9 +148,7 @@ PracticeGame.SurveyStateLearn2X.prototype.create = function() {
         // text.backgroundColor = 'yellow'
     }
     this.actualQuestionTextIndex = 0
-    this.questionTextArray[this.actualQuestionTextIndex].setStyle({
-            backgroundColor: "gray"
-        })
+    this.questionTextArray[this.actualQuestionTextIndex].setStyle( this.onWorkStyle )
         // this.questionText = this.game.add.text(this.world.width / 2, 110, this.multiplier.toString() + " * " + this.multiplicand.toString() + " = ", {
         //     font: "30px Arial",
         //     fill: "yellow",
@@ -198,8 +201,8 @@ PracticeGame.SurveyStateLearn2X.prototype.utils = {
 
     clickOnMagician: function() {
         // if (this.bicycleCount < this.multiplierArrayShuffled[this.actualQuestionTextIndex]) {
-            this.instructionText.setText("Ha segítség kell a számoláshoz, kattints a biciklikre.")
-            this.helpButton.visible = false
+        this.instructionText.setText("Ha segítség kell a számoláshoz, kattints a biciklikre.")
+        this.helpButton.visible = false
         if (this.bicycleCount < 10) {
             // var bicycleLineNum = 0
             // var computerImageXCount = 0
@@ -220,9 +223,9 @@ PracticeGame.SurveyStateLearn2X.prototype.utils = {
 
 
         if (this.bicycleCount == this.multiplierArrayShuffled[this.actualQuestionTextIndex]) {
-                // this.magicianButton.destroy()
-                // this.readyButton.destroy()
-                // this.computeButton.visible = true
+            // this.magicianButton.destroy()
+            // this.readyButton.destroy()
+            // this.computeButton.visible = true
         }
     },
 
@@ -239,8 +242,9 @@ PracticeGame.SurveyStateLearn2X.prototype.utils = {
 
     clickOnBicycle: function(source) {
         console.log('cob' + source)
-        if (this.bicycleCount !=  this.multiplierArrayShuffled[this.actualQuestionTextIndex]) {
-            this.wrongBicylceCountText = this.game.add.text(10, source.position.y, "Nem ennyi biciklire van szukseged, \nnezd meg mennyivel kell szorozni a " + this.multiplicand + "-t")
+        if (this.bicycleCount != this.multiplierArrayShuffled[this.actualQuestionTextIndex]) {
+            this.wrongBicylceCountText = this.game.add.text(10, source.position.y + 30, "Nem ennyi biciklire van szükseged, \nnézd meg mennyivel kell szorozni a " + this.multiplicand + "-t")
+            this.wrongBicylceCountText.fill = 'red'
             while (this.bicycleGroup.length > 0) {
                 this.bicycleGroup.children.pop().destroy()
             }
@@ -311,6 +315,7 @@ PracticeGame.SurveyStateLearn2X.prototype.utils = {
     },
 
     readyButtonClick: function() {
+        this.instructionText.setText('')
         this.helpButton.visible = true
         this.magicianButton.visible = false
             // this.bicycleNoWheelGroup.destroy()
@@ -352,14 +357,10 @@ PracticeGame.SurveyStateLearn2X.prototype.utils = {
             // if (this.answer == (this.multiplier * this.multiplicand).toString()) {
             if (this.answer == (this.multiplicand * this.multiplierArrayShuffled[this.actualQuestionTextIndex]).toString()) {
                 // this.instructionText.setText("Ügyes vagy, ez a helyes válasz!\n Kattints a \"JÁTÉK\" gombra")
-                this.questionTextArray[this.actualQuestionTextIndex].setStyle({
-                    backgroundColor: null
-                })
+                this.questionTextArray[this.actualQuestionTextIndex].setStyle(this.readyStyle )
                 if (this.actualQuestionTextIndex != this.multiplierArrayShuffled.length - 1) {
                     this.actualQuestionTextIndex++
-                        this.questionTextArray[this.actualQuestionTextIndex].setStyle({
-                            backgroundColor: 'gray'
-                        })
+                        this.questionTextArray[this.actualQuestionTextIndex].setStyle(this.onWorkStyle)
                 }
                 else {
                     this.instructionText.setText("Ügyes vagy, ez a helyes válasz!\n Kattints a \"JÁTÉK\" gombra")
@@ -386,9 +387,7 @@ PracticeGame.SurveyStateLearn2X.prototype.utils = {
             }
             else {
                 // this.questionText.fill = "red"
-                this.questionTextArray[this.actualQuestionTextIndex].setStyle({
-                    fill: 'red'
-                })
+                this.questionTextArray[this.actualQuestionTextIndex].setStyle(this.errorStyle)
                 this.instructionText.setText("Ez nem a helyes eredmény, próbáld újra")
             }
 
@@ -403,10 +402,11 @@ PracticeGame.SurveyStateLearn2X.prototype.utils = {
             // this.questionText.fill = "yellow"
         var text = this.multiplierArrayShuffled[this.actualQuestionTextIndex].toString() + " * " + this.multiplicand.toString() + " = "
         this.questionTextArray[this.actualQuestionTextIndex].setText(text)
-        if(this.wrongBicylceCountText != null) this.wrongBicylceCountText.destroy()
+        if (this.wrongBicylceCountText != null) {
+            this.wrongBicylceCountText.destroy()
 
             this.magicianButton.visible = true
-
+        }
 
         while (this.bicycleNoWheelGroup.length > 0) {
             this.bicycleNoWheelGroup.children.pop().destroy()
