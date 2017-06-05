@@ -35,16 +35,17 @@ module('learnG').controller('surveyController', function($scope, $routeParams, $
 			render: render
 		});*/
 
-		PracticeGameBaseState.prototype.surveyType = surveyType
+		// PracticeGameBaseState.prototype.surveyType = surveyType
 		var game = new Phaser.Game(800, 600);
 
 		// game.state.add('InitState', PracticeGame.InitState);
-		game.state.add('ShootingState', PracticeGame.ShootingState);
+		// game.state.add('ShootingState', PracticeGame.ShootingState);
+    	game.state.add('PracticeState', PracticeState);
 		// game.state.add('ChaseState', PracticeGame.ChaseState);
 		
-		game.state.add('SurveyStateLearn2X', PracticeGame.SurveyStateLearn2X);
-		game.state.add('SurveyStateLearn2Div', PracticeGame.SurveyStateLearn2Div);
-		game.state.add('GrandFinaleState', PracticeGame.GrandFinaleState);
+		// game.state.add('SurveyStateLearn2X', PracticeGame.SurveyStateLearn2X);
+		// game.state.add('SurveyStateLearn2Div', PracticeGame.SurveyStateLearn2Div);
+		// game.state.add('GrandFinaleState', PracticeGame.GrandFinaleState);
 
 
 		// var survey = new Survey(game)
@@ -97,7 +98,7 @@ module('learnG').controller('surveyController', function($scope, $routeParams, $
 		// game.state.start('GrandFinaleState');
 		
 		// game.state.start('ShootingState',true,false,1,true,true,surveyType);
-		game.state.start('ShootingState',true,false,1,true,true);
+		game.state.start('PracticeState');
 
 	// })
 
