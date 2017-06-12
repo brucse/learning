@@ -23,6 +23,8 @@ PracticeState.prototype.preload = function() {
     this.load.spritesheet('torpedo', 'assets/torpedo.png', 100, 23);
 
     this.load.image('wall', 'assets/sky1.png');
+    this.load.spritesheet('explosion','assets/explosion.png')
+
 }
 
 PracticeState.prototype.create = function() {
@@ -49,6 +51,8 @@ PracticeState.prototype.create = function() {
     var rightAnswerIndex = this.game.rnd.between(0,4)
     arr[rightAnswerIndex] = this.answer
 
+    this.explodes = this.add.group()
+
     for(var i = 0 ; i < 5; i++){
         var battleship1 = this.battleships.create(shiftPixel * i, this.world.height - 400 , 'battleship')
 
@@ -61,31 +65,46 @@ PracticeState.prototype.create = function() {
         battleship1.label = text
         // battleship1.events.onInputDown.add(this.clickOnBattleShip,battleship1)
         battleship1.events.onInputDown.add(this.clickOnBattleShip,this)
+        battleship1.animations.add('explosion')
+        this.game.physics.arcade.enable(battleship1)
+        battleship1.enableBody = true
+
     }
     this.game.physics.arcade.enable(this.battleships)
     this.questionText = this.game.add.text(this.world.width /2, 30,this.question,style)
 
 
     this.uss_submarineMove = this.game.add.tween(this.uss_submarine)
+    this.torpedo = this.add.sprite(this.uss_submarine.x, this.uss_submarine.y , 'torpedo')
+    this.torpedo.visible = false
+    this.game.physics.arcade.enable(this.torpedo)
+    this.torpedo.enableBody = true
 }
 
 PracticeState.prototype.update = function () {
-    
+
+    this.physics.arcade.collide(this.torpedo, this.battleships, this.torpedoHit);
 }
 
 PracticeState.prototype.clickOnBattleShip = function (source) {
     console.log(source.label)
     var y = source.position.y
     this.uss_submarineMove.to({x:source.position.x})
-    this.uss_submarineMove.onComplete.add(this.startTorpedo,this,null,y)
+    this.uss_submarineMove.onComplete.add(this.startTorpedo,this,null,source.position.x,y)
     this.uss_submarineMove.start()
 
 
 }
 
-PracticeState.prototype.startTorpedo = function (a,b,y) {
-    var torpedo = this.add.sprite(this.uss_submarine.x, this.uss_submarine.y , 'torpedo')
-   var torpedoTween  = this.game.add.tween(torpedo)
-    torpedoTween.to({y: y})
+PracticeState.prototype.startTorpedo = function (a,b,x,y) {
+    this.torpedo.position.x = this.uss_submarine.position.x
+    this.torpedo.position.y = this.uss_submarine.position.y
+    this.torpedo.visible = true
+   var torpedoTween  = this.game.add.tween(this.torpedo)
+    torpedoTween.to({x: x,y: y})
     torpedoTween.start()
+}
+
+PracticeState.prototype.torpedoHit = function (torpedo,battleship) {
+   battleship.animations.play('explosion')
 }
